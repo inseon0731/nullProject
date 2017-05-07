@@ -184,7 +184,6 @@ public class MapActivity extends AppCompatActivity {
     private ListView lv;
     private Button b;
     private BleList bleList = null;
-    //boolean scanning = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -708,8 +707,8 @@ public class MapActivity extends AppCompatActivity {
         {
             case R.id.location:
                 int px=0,py=0;
-                px = Xc + (int)(xf*0.11) + vw/2 - g;
-                py = Yc + (int)(yf*0.11) -g*5/6;
+                px = Xc + (int)(xf*z[0]) + vw/2 - g;
+                py = Yc + (int)(yf*z[1]) -g*5/6;
                 kkk = (FrameLayout.LayoutParams) LL.getLayoutParams();
                 if(px < 0)
                     px = 0;
@@ -719,6 +718,7 @@ public class MapActivity extends AppCompatActivity {
                     py = 0;
                 kkk.setMargins(px, py, 0, 0);
                 inflater.inflate(R.layout.bloonme, LL, true);
+                nn = true;
                 isOpened = true;
 
                 TextView textMarker = (TextView)findViewById(R.id.textMarker);
@@ -741,14 +741,17 @@ public class MapActivity extends AppCompatActivity {
                                 }
                             }
                             path = Dikstra.dikstra(weightMatrix, start, end);
-                            if(path != null) {
+                            if(path != null && path.length != 1) {
                                 if (Point.getD(now, pa[path[1]]) < Point.getD(pa[path[0]], pa[path[1]])) {
                                     for (int i = 0; i < path.length - 1; i++)
                                         path[i] = path[i + 1];
                                 }
                             }
                             se = false;
-                            nn = true;
+                            if(start == end)
+                                nn = false;
+                            else
+                                nn = true;
                             alongLocate.invalidate();
                             alongLocate.setVisibility(View.VISIBLE);
                         }
