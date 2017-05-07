@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">ProjectLouvre</string>
+
+    <string name="exhibitioninImageView">샤갈 달리 뷔페 전</string>
+    <string name="galleryinImageView">루브르 박물관</string>
+    <string name="title_activity_exhi_info">ExhiInfoActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_gallery_info">GalleryInfoActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">Filter ListView Tutorial</string>
+    <string name="namelabel">"Name : "</string>
+    <string name="countrylabel">"Country : "</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+</resources>

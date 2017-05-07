@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.hong_inseon.projectlouvre">
+
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application
+        android:largeHeap="true"
+        android:hardwareAccelerated="false"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ExhibitionInfoActivity"
+            android:label=" "
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".PlayActivity"></activity>
+        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".ListActivity"></activity>
+        <activity android:name=".TabBuyListActivity"></activity>
+        <activity android:name=".TabMyInfoActivity"></activity>
+        <activity android:name=".TabFavoExhiActivity"></activity>
+        <activity android:name=".TabFavoGalleryActivity"></activity>
+        <activity android:name=".popup1" />
+        <activity android:name=".popup2" />
+        <activity android:name=".popup3" />
+        <activity android:name=".ListviewItem"></activity>
+        <activity android:name=".JoinActivity"></activity>
+        <activity android:name=".MapActivity"></activity>
+        <activity android:name=".MuseumInfoActivity"></activity>
+        <activity
+            android:name=".OptionP"
+            android:label=" "
+            android:theme="@style/mainU" />
+        <activity android:name=".Cart"
+            android:label=" "
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".Profile"
+            android:label=" "
+            />
+        <activity
+            android:name=".LikeExhibition"
+            android:label=" "
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".LikeMuseum"
+            android:label=" "
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".MayBeMain"
+            android:label=" "
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+    </application>
+
+</manifest>
