@@ -436,7 +436,7 @@ public class MapActivity extends AppCompatActivity {
                                 LayOpen = true;
                                 startActivityForResult(intent3, 3);
                             } else {
-
+                                Log.v("@@", "no beacon here\n");
                             }
                         }
                     }
