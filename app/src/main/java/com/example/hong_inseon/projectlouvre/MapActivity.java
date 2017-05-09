@@ -47,6 +47,7 @@ public class MapActivity extends AppCompatActivity {
     private LayoutInflater inflater;
     private RelativeLayout LL;
     private boolean LayOpen =  false;
+    public static int opennum = 0;
 
     static int[][] weightMatrix = {
             //  0    1    2    3    4    5    6    7    8    9    10   11   12   13   14
@@ -396,13 +397,22 @@ public class MapActivity extends AppCompatActivity {
                 bleList.notifyDataSetChanged(); // beacon4
             }*/
 
+            view = (ImageView)findViewById(R.id.location);
+            kkk = (FrameLayout.LayoutParams)view.getLayoutParams();
             Log.v("@@@", bleList.getCount() + "");
 
             try {
                 if(!LayOpen) {
                     for (int k = 0; k < bleList.getCount(); k++) {
+                        /*if(opennum == 1 || opennum == 2 || opennum == 3)
+                        {
+                            onStopMp(opennum);
+                        }*/
+
                         if (bleList.RSSIs.get(k) >= -55) {
                             if (bleList.devices.get(k).getAddress().equals("F0:9D:50:D7:49:6C")) {
+                                LayOpen = true;
+                                opennum = 1;
                                 z[0] = 250.0f / WMd;
                                 z[1] = 450.0f / HMd;
                                 now = new Point((float) Xc + xf * z[0] + vw / 2, (float) Yc + yf * z[1] + vw / 2);
@@ -410,7 +420,7 @@ public class MapActivity extends AppCompatActivity {
                                 Yp = (int) (yf * z[1]);                               //위의 조건문에서 바뀐 Xc나 Yc에 대해 Xp와 Yp를 정한다.
                                 kkk.setMargins(Xp + Xc, Yp + Yc, 0, 0);
                                 intent1.putExtra("value", make);
-                                LayOpen = true;
+                                //popup1.rssi1 = bleList.RSSIs.get(k);
                                 startActivityForResult(intent1, 1);
                             }
                             if (bleList.devices.get(k).getAddress().equals("E5:F1:43:74:F5:76")) {
@@ -422,6 +432,7 @@ public class MapActivity extends AppCompatActivity {
                                 kkk.setMargins(Xp + Xc, Yp + Yc, 0, 0);
                                 intent2.putExtra("value", make);
                                 LayOpen = true;
+                                opennum = 2;
                                 startActivityForResult(intent2, 2);
                             }
                             if (bleList.devices.get(k).getAddress().equals("DA:DF:3A:F3:52:38")) {
@@ -433,11 +444,21 @@ public class MapActivity extends AppCompatActivity {
                                 kkk.setMargins(Xp + Xc, Yp + Yc, 0, 0);
                                 intent3.putExtra("value", make);
                                 LayOpen = true;
+                                opennum = 3;
                                 startActivityForResult(intent3, 3);
                             } else {
                                 Log.v("@@", "no beacon here\n");
                             }
                         }
+
+                        /*if(bleList.RSSIs.get(k) < -55)
+                        {
+                            try
+                            {
+                                onStopMp(opennum);
+                            } catch(Exception e)
+                            {}
+                        }*/
                     }
                 }
             }
@@ -533,6 +554,7 @@ public class MapActivity extends AppCompatActivity {
                 isOpened = false;
                 alongLocate.setVisibility(INVISIBLE);
                 intent1.putExtra("value",make);
+                onStopMp(opennum);
                 startActivityForResult(intent1,1);
             }
         });
@@ -602,6 +624,7 @@ public class MapActivity extends AppCompatActivity {
                 vv.setVisibility(View.INVISIBLE);
                 alongLocate.setVisibility(View.INVISIBLE);
                 intent2.putExtra("value",make);
+                onStopMp(opennum);
                 startActivityForResult(intent2,2);
             }
         });
@@ -682,6 +705,7 @@ public class MapActivity extends AppCompatActivity {
                 isOpened = false;
                 alongLocate.setVisibility(View.INVISIBLE);
                 intent3.putExtra("value",make);
+                onStopMp(opennum);
                 startActivityForResult(intent3,3);
             }
         });
@@ -796,12 +820,15 @@ public class MapActivity extends AppCompatActivity {
             {
                 case 1:
                     make = data.getIntExtra("value1", -1);
+                    opennum = 1;
                     break;
                 case 2:
                     make = data.getIntExtra("value1", -1);
+                    opennum = 2;
                     break;
                 case 3:
                     make = data.getIntExtra("value1", -1);
+                    opennum = 3;
                     break;
             }
             LayOpen = false;
@@ -831,5 +858,15 @@ public class MapActivity extends AppCompatActivity {
     public void onResume() {
         LayOpen = false;
         super.onResume();
+    }
+
+    public void onStopMp(int pos) {
+        if(pos == 1)
+            popup1.mp.stop();
+        else if(pos == 2)
+            popup2.mp.stop();
+        else if(pos == 3)
+            popup3.mp.stop();
+        opennum = 0;
     }
 }

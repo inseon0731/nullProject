@@ -15,6 +15,7 @@ public class popup1 extends AppCompatActivity {
     Button button;
     SeekBar seekbar;
     public static MediaPlayer mp;
+    public static int rssi1 = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,11 @@ public class popup1 extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     seekbar.setProgress(mp.getCurrentPosition());
+                    if(rssi1 < -55)
+                    {
+                        onBackPressed();
+                    }
+                    Log.d("@@@@@@", rssi1 + "");
                 }
             }
         };
@@ -99,13 +105,13 @@ public class popup1 extends AppCompatActivity {
 
     @Override
     public void onPause() {
-        mp.stop();
+        //mp.stop();
         super.onPause();
     }
 
     @Override
     public void onStop() {
-        mp.stop();
+        //mp.stop();
         super.onStop();
     }
 
@@ -114,4 +120,6 @@ public class popup1 extends AppCompatActivity {
         mp.stop();
         this.finish();
     }
+
+
 }
