@@ -1,18 +1,12 @@
-//http://cocomo.tistory.com/387
-//http://swalloow.tistory.com/60
-//jsp서버연동 : http://blog.naver.com/PostView.nhn?blogId=abcdtyy456&logNo=220597953881
-//
 package com.example.hong_inseon.projectlouvre;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,6 +16,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
@@ -29,18 +24,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText etEmail;
     private EditText etPassword;
-    private Button btnJoin; //sign up button
-    private Button btnLogin; //login button
-
-    private CheckBox autoLogin;
-
-    //StringBuffer sb = new StringBuffer();
-    //ArrayList<String> emailList = new ArrayList<>();
-    //ArrayList<String> pwList = new ArrayList<>();
-
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
-    //Boolean loginChecked;
+    private Button btnJoin;
+    private Button btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,20 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
         btnJoin = (Button) findViewById(R.id.btnJoin);
         btnLogin = (Button) findViewById(R.id.btnLogin);
-        autoLogin = (CheckBox) findViewById(R.id.autoLogin);
 
-        pref = getSharedPreferences("pref", 0);
-        editor = pref.edit();
-
-        //if autoLogin checked, get input
-        if (pref.getBoolean("autoLogin", false)) {
-            etEmail.setText(pref.getString("id", ""));
-            etPassword.setText(pref.getString("pw", ""));
-            autoLogin.setChecked(true);
-            // goto LoginActivity
-        }
-
-        //autoLogin.setOnCheckedChangeListener(onCheckedChangeListener);
         btnLogin.setOnClickListener(onClickListener);
         btnJoin.setOnClickListener(onClickListener);
     }
@@ -75,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // 웹서버 주소 설정
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE3/WebContent/test.jsp";
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE10/getLogin.jsp";
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
@@ -109,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
             JSONArray jArr = json.getJSONArray("LoginResult");
 
             // 받아온 pRecvServerPage를 분석하는 부분
-            String[] jsonName = {"Result"};
+            String[] jsonName = {"Result", "Result2"};
             String[][] parseredData = new String[jArr.length()][jsonName.length];
             for (int i = 0; i < jArr.length(); i++) {
                 json = jArr.getJSONObject(i);
@@ -135,8 +107,7 @@ public class LoginActivity extends AppCompatActivity {
         public void onClick(View view) {
 
             switch (view.getId()) {
-                case R.id.btnLogin :
-
+                case R.id.btnLogin:
                     if (android.os.Build.VERSION.SDK_INT > 9) {
                         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                         StrictMode.setThreadPolicy(policy);
@@ -144,93 +115,47 @@ public class LoginActivity extends AppCompatActivity {
 
                     String loginid = etEmail.getText().toString();
 
-                    //String loginpw = etPassword.getText().toString();
-
                     try {
                         String result = SendByHttp(loginid);
                         String[][] parsedData = jsonParserList(result);
-
-                        //String result = new UserTask().execute(loginid, loginpw, "login").get();
-
-                        Log.v("ab", "onclick11111111");
-
-
-
-                        if (parsedData[0][0].equals("true")) {
-
+                        if (parsedData[0][0].equals("succed")) {
                             Toast.makeText(LoginActivity.this, "로그인", Toast.LENGTH_SHORT).show();
-
                             Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
-
                             startActivity(intent);
-
                             finish();
-
                         } else if (parsedData[0][0].equals("false")) {
-
                             Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호가 틀렸음", Toast.LENGTH_SHORT).show();
-
                             etEmail.setText("");
-
                             etPassword.setText("");
-
                         } else if (parsedData[0][0].equals("noId")) {
-
                             Toast.makeText(LoginActivity.this, "존재하지 않는 아이디", Toast.LENGTH_SHORT).show();
-
                             etEmail.setText("");
-
                             etPassword.setText("");
-
                         }
-
-
                     } catch (Exception e) {
-
                     }
-
                     break;
 
 
                 case R.id.btnJoin:
-
                     String joinid = etEmail.getText().toString();
-
                     String joinpwd = etPassword.getText().toString();
-
                     try {
-
                         String result = SendByHttp(joinid);
                         // String result  = new UserTask().execute(joinid,joinpwd,"join").get();
-
                         if (result.equals("id")) {
-
                             Toast.makeText(LoginActivity.this, "이미 존재하는 아이디입니다.", Toast.LENGTH_SHORT).show();
-
                             etEmail.setText("");
-
                             etPassword.setText("");
-
                         } else if (result.equals("ok")) {
-
                             etEmail.setText("");
-
                             etPassword.setText("");
-
                             Toast.makeText(LoginActivity.this, "회원가입을 축하합니다.", Toast.LENGTH_SHORT).show();
-
                         }
-
                     } catch (Exception e) {
                     }
-
                     break;
-
-            } // switch 끝
+            }
         } //onclick 끝
     };
-
-
-
-
 }
