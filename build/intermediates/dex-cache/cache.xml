@@ -3,6 +3,7 @@
 
     <item
         is-multidex="true"
+<<<<<<< HEAD
         jar="C:\Users\juneb\.android\build-cache\f034fc7692dca5a37485583624caea12a6849d24\output\jars\classes.jar"
         jumboMode="true"
         optimize="true"
@@ -121,10 +122,23 @@
     <item
         is-multidex="true"
         jar="D:\startAndroid\PL\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+=======
+        jar="/Users/Hong-Inseon/nullProject/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="11f5d1b945774032e878d1067c6c1c9ab83fc4d4">
+        <dex dex="/Users/Hong-Inseon/nullProject/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_6bc0f83e88071dc7a5749acb9d478cdc14ce5a26/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/Hong-Inseon/nullProject/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+>>>>>>> inseon
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
+<<<<<<< HEAD
         <dex dex="D:\startAndroid\PL\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_340c6cb4c079be30ec8c93733cfe1aa3a4614a6e\classes.dex" />
     </item>
     <item
@@ -279,6 +293,9 @@
         revision="25.0.2"
         sha1="ca3c7aa31e2726a400a6e552b93cb9f63c9a1e6d">
         <dex dex="D:\startAndroid\PL\app\build\intermediates\pre-dexed\debug\classes_04592ccaa336fbe1a183c29851d2f471acacf212.jar" />
+=======
+        <dex dex="/Users/Hong-Inseon/nullProject/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_a41e749b4231d251be3af1b4f31552d05bde84a4/classes.dex" />
+>>>>>>> inseon
     </item>
 
 </items>
