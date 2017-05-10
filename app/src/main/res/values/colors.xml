@@ -7,6 +7,7 @@
     <color name="colorBlack">#000000</color>
 
     <color name="colorBackground">#A7A37E</color>
+    <color name="colorBackgroundA">#A7A37E</color>
     <color name="colorTab">#E6E2AF</color>
     <color name="colorButton">#EFECCA</color>
     <color name="colorPoint">#046380</color>
