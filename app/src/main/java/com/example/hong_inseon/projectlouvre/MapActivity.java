@@ -404,11 +404,6 @@ public class MapActivity extends AppCompatActivity {
             try {
                 if(!LayOpen) {
                     for (int k = 0; k < bleList.getCount(); k++) {
-                        /*if(opennum == 1 || opennum == 2 || opennum == 3)
-                        {
-                            onStopMp(opennum);
-                        }*/
-
                         if (bleList.RSSIs.get(k) >= -55) {
                             if (bleList.devices.get(k).getAddress().equals("F0:9D:50:D7:49:6C")) {
                                 LayOpen = true;
@@ -420,7 +415,6 @@ public class MapActivity extends AppCompatActivity {
                                 Yp = (int) (yf * z[1]);                               //위의 조건문에서 바뀐 Xc나 Yc에 대해 Xp와 Yp를 정한다.
                                 kkk.setMargins(Xp + Xc, Yp + Yc, 0, 0);
                                 intent1.putExtra("value", make);
-                                //popup1.rssi1 = bleList.RSSIs.get(k);
                                 startActivityForResult(intent1, 1);
                             }
                             if (bleList.devices.get(k).getAddress().equals("E5:F1:43:74:F5:76")) {
@@ -453,11 +447,15 @@ public class MapActivity extends AppCompatActivity {
 
                         /*if(bleList.RSSIs.get(k) < -55)
                         {
-                            try
-                            {
-                                onStopMp(opennum);
-                            } catch(Exception e)
-                            {}
+                            if (bleList.devices.get(k).getAddress().equals("F0:9D:50:D7:49:6C")) {
+                                popup1.mp.stop();
+                            }
+                            if (bleList.devices.get(k).getAddress().equals("E5:F1:43:74:F5:76")) {
+                                popup2.mp.stop();
+                            }
+                            if (bleList.devices.get(k).getAddress().equals("DA:DF:3A:F3:52:38")) {
+                                popup3.mp.stop();
+                            }
                         }*/
                     }
                 }
