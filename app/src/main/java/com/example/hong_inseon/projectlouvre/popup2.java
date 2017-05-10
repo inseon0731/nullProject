@@ -6,14 +6,21 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import java.io.IOException;
 
 public class popup2 extends AppCompatActivity {
-    Button button;
+    ImageView button;
     SeekBar seekbar;
     public static MediaPlayer mp;
+
+    private TextView playstart;
+    private TextView playlast;
+    int m, time, timel;
+    String str;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,13 +28,15 @@ public class popup2 extends AppCompatActivity {
         setContentView(R.layout.activity_popup2);
 
         seekbar = (SeekBar) findViewById(R.id.seekBar2);
+        playstart = (TextView)findViewById(R.id.textplaystart2);
+        playlast = (TextView)findViewById(R.id.textplaylast2);
 
         mp = MediaPlayer.create(this, R.raw.music2);
         mp.start();
         Thread();
         mp.setLooping(true);
 
-        button = (Button) findViewById(R.id.popupB2);
+        button = (ImageView) findViewById(R.id.play2);
 
         seekbar.setMax(mp.getDuration());
 
@@ -80,12 +89,12 @@ public class popup2 extends AppCompatActivity {
             mp.seekTo(0);
 
             // 버튼의 글자를 시작으로, 시크바를 처음으로 되돌립니다
-            button.setText("start");
+            //button.setText("start");
             seekbar.setProgress(0);
         } else {
             // 음악을 실행합니다
             mp.start();
-            button.setText("stop");
+            //button.setText("stop");
 
             /**
              * 쓰래드를 돌려 1초마다 SeekBar를 움직이게 합니다
@@ -111,6 +120,16 @@ public class popup2 extends AppCompatActivity {
                      * music.getCurrentPosition()은 현재 음악 재생 위치를 가져오는 구문 입니다
                      */
                     seekbar.setProgress(mp.getCurrentPosition());
+                    time= mp.getCurrentPosition()/1000;
+                    m = time/60;
+                    time = time%60;
+                    str = m+" : "+ time;
+                    playstart.setText(str);
+                    timel= mp.getDuration()/1000 - mp.getCurrentPosition()/1000;
+                    m = timel/60;
+                    timel = timel%60;
+                    str = String.format("%d : %d", m, timel);
+                    playlast.setText(str);
                 }
             }
         };

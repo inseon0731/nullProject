@@ -1,6 +1,7 @@
 package com.example.hong_inseon.projectlouvre;
 
 import android.content.Intent;
+import android.os.StrictMode;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -8,12 +9,26 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import com.example.hong_inseon.projectlouvre.dao.Exhibition;
+import com.example.hong_inseon.projectlouvre.dao.Museum;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class LikeExhibition extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -24,11 +39,18 @@ public class LikeExhibition extends AppCompatActivity implements NavigationView.
     int[] Image;
     ArrayList<Exhibition> arraylist = new ArrayList<Exhibition>();
     private int men;
+    Exhibition exData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_heart);
+
+        if (android.os.Build.VERSION.SDK_INT > 9)
+        {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         men = -1;
 
@@ -44,7 +66,7 @@ public class LikeExhibition extends AppCompatActivity implements NavigationView.
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view2);
         navigationView.setNavigationItemSelectedListener(this);
 
-        name1 = new String[] { "China", "India", "United States",
+        /*name1 = new String[] { "China", "India", "United States",
                 "Indonesia", "Brazil", "Pakistan", "Nigeria", "Bangladesh",
                 "Russia", "Japan"};
 
@@ -55,7 +77,7 @@ public class LikeExhibition extends AppCompatActivity implements NavigationView.
                 "2017.02.26~2017.07.21", "2017.02.25~2017.07.21", "2017.02.24~2017.07.21", "2017.02.23~2017.07.21"
                 , "2017.02.22~2017.07.21","2017.02.21~2017.07.21", "2017.02.20~2017.07.21"};
         Image = new int[] {R.drawable.no,R.drawable.cart,R.drawable.heart,R.drawable.louvre,R.drawable.profile,
-                            R.drawable.mypage,R.drawable.temple,R.drawable.search,R.drawable.cart,R.drawable.profile};
+                            R.drawable.mypage,R.drawable.temple,R.drawable.search,R.drawable.cart,R.drawable.profile};*/
         //리스트에 들어갈 자료들 정리
 
         list = (ListView)findViewById(R.id.listViewHeart);
@@ -68,15 +90,91 @@ public class LikeExhibition extends AppCompatActivity implements NavigationView.
             }
         });
 
-        for (int i = 0; i < name1.length; i++)
+        /*for (int i = 0; i < name1.length; i++)
         {
             Exhibition hs = new Exhibition(name1[i],name2[i],name3[i], Image[i]);
             arraylist.add(hs);
-        }
+        }*/
         //리스트배열을 정리
 
+        String result = SendByHttp("/getJsonExhibitionList.jsp");
+
+        arraylist = jsonParserList(result);
         listh = new ListViewAdapterExhibition(this, arraylist);
         list.setAdapter(listh);
+    }
+
+    private String SendByHttp(String msg) {
+
+        if(msg == null)
+            msg = "";
+
+        //String URL = ServerUtil.SERVER_URL;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE/getJsonExhibitionList.jsp";
+        DefaultHttpClient client = new DefaultHttpClient();
+
+        try {
+			/* 체크할 값 서버로 전송 : 쿼리문이 아니라 넘어갈 uri주소 */
+            HttpPost post = new HttpPost(URL);
+			/* 지연시간 최대 3초 */
+            HttpParams params = client.getParams();
+            HttpConnectionParams.setConnectionTimeout(params, 5000);
+            HttpConnectionParams.setSoTimeout(params, 5000);
+
+			/* 데이터 보낸 뒤 서버에서 데이터를 받아오는 과정 */
+            HttpResponse response = client.execute(post);
+            BufferedReader bufreader = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent(), "euc-kr"));
+            String line = null;
+            String result = "";
+            while ((line = bufreader.readLine()) != null) {
+                result += line;
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            client.getConnectionManager().shutdown();	// 연결 지연 종료
+            return "";
+        }
+    }
+
+    public ArrayList jsonParserList(String pRecvServerPage) {
+        Log.i("서버에서 받은 전체 내용 : ", pRecvServerPage);
+        try {
+            JSONObject jsonObject = new JSONObject(pRecvServerPage);
+            JSONArray jarray = jsonObject.getJSONArray("exhibitions");
+
+            // 받아온 pRecvServerPage를 분석하는 부분
+            for (int i = 0; i < jarray.length(); i++) {
+                JSONObject jObject = jarray.getJSONObject(i);  // JSONObject 추출
+
+                if(jObject != null) { //museum 데이터 객체에 파싱한 값 저장.
+                    exData = new Exhibition();
+                    exData.setEx_no(jObject.getString("ex_no"));
+                    exData.setEx_name(jObject.getString("ex_name"));
+                    exData.setEx_theme(jObject.getString("ex_theme"));
+                    exData.setEx_like(jObject.getString("ex_like"));
+                    exData.setEx_img(jObject.getString("ex_img"));
+                    exData.setMs_no(jObject.getString("ms_no"));
+                    exData.setEx_location(jObject.getString("ex_location"));
+                    exData.setEx_rating(jObject.getString("ex_rating"));
+                    exData.setEx_pay(jObject.getString("ex_pay"));
+                    exData.setEx_exp(jObject.getString("ex_exp"));
+                    exData.setEx_period(jObject.getString("ex_period"));
+                    exData.setEx_ing(jObject.getString("ex_ing"));
+                    arraylist.add(exData);
+                }
+            }
+
+            // 분해 된 데이터를 확인하기 위한 부분
+            for(int i=0; i<jarray.length(); i++){
+                Log.i("JSON을 파싱한 데이터 출력해보기"+i+" : ", exData.toString());
+            }
+            return arraylist;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
