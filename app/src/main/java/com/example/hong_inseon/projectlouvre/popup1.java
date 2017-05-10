@@ -29,6 +29,7 @@ public class popup1 extends AppCompatActivity {
 
     int m, time, timel;
     String str;
+    //int a;
 
     /*public class BleList {//리스트뷰 어뎁터 선언
         private ArrayList<BluetoothDevice> devices;
