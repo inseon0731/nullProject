@@ -1,14 +1,13 @@
 package com.example.hong_inseon.projectlouvre;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -16,9 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import com.example.hong_inseon.projectlouvre.dao.Museum;
 import com.example.hong_inseon.projectlouvre.dao.MuseumDAO;
-import com.example.hong_inseon.projectlouvre.dao.ServerUtil;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -104,7 +103,7 @@ public class LikeMuseum extends AppCompatActivity implements NavigationView.OnNa
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE/getJsonMuseumList.jsp";
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE11/getJsonMuseumList.jsp";
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
@@ -141,7 +140,7 @@ public class LikeMuseum extends AppCompatActivity implements NavigationView.OnNa
         Log.i("서버에서 받은 전체 내용 : ", pRecvServerPage);
         try {
             JSONObject jsonObject = new JSONObject(pRecvServerPage);
-            JSONArray jarray = jsonObject.getJSONArray("museums");
+            JSONArray jarray = jsonObject.getJSONArray("museum");
 
             // 받아온 pRecvServerPage를 분석하는 부분
             for (int i = 0; i < jarray.length(); i++) {
