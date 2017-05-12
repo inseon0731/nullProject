@@ -8,13 +8,32 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+
+import com.example.hong_inseon.projectlouvre.dao.Piece;
+import com.example.hong_inseon.projectlouvre.dao.User;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class Profile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private int men;
+    private int un = 1;
+    private TextView tv;
+    User userData, getUserData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +51,25 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_viewP);
         navigationView.setNavigationItemSelectedListener(this);
+
+        String result = SendByHttp("/getJsonUser.jsp"); // 메시지를 서버에 보냄
+
+        Log.i("서버에서 받은 전체 내용 : ", result);
+        //String[][] parsedData = jsonParserList(); // 받은 메시지를 json 파싱결과를 museum객체에 저장
+        getUserData = jsonParser(result);
+
+        tv = (TextView)findViewById(R.id.textView12);
+        tv.setText(getUserData.getUser_email());
+        tv = (TextView)findViewById(R.id.textView14);
+        tv.setText(getUserData.getUser_pw());
+        tv = (TextView)findViewById(R.id.textView16);
+        tv.setText(getUserData.getUser_name());
+        tv = (TextView)findViewById(R.id.textView18);
+        String str = getUserData.getUser_gender();
+        if(str == "0")
+            tv.setText("남자");
+        else if(str == "1")
+            tv.setText("여자");
     }
 
     @Override
@@ -91,6 +129,66 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
             case R.id.buttonPBack :
                 onBackPressed();
                 break ;
+        }
+    }
+
+    private String SendByHttp(String msg) {
+
+        if(msg == null)
+            msg = "";
+
+        //String URL = ServerUtil.SERVER_URL;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE/getJsonUser.jsp?un="+un;
+        DefaultHttpClient client = new DefaultHttpClient();
+
+        try {
+			/* 체크할 값 서버로 전송 : 쿼리문이 아니라 넘어갈 uri주소 */
+            HttpPost post = new HttpPost(URL);
+			/* 지연시간 최대 3초 */
+            HttpParams params = client.getParams();
+            HttpConnectionParams.setConnectionTimeout(params, 5000);
+            HttpConnectionParams.setSoTimeout(params, 5000);
+
+			/* 데이터 보낸 뒤 서버에서 데이터를 받아오는 과정 */
+            HttpResponse response = client.execute(post);
+            BufferedReader bufreader = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent(), "euc-kr"));
+            String line = null;
+            String result = "";
+            while ((line = bufreader.readLine()) != null) {
+                result += line;
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            client.getConnectionManager().shutdown();	// 연결 지연 종료
+            return "";
+        }
+    }
+
+    /**
+     * 받은 JSON 객체를 파싱하는 메소드
+     * @param pRecvServerPage
+     * @return
+     */
+    public User jsonParser(String pRecvServerPage) {
+        Log.i("서버에서 받은 전체 내용 : ", pRecvServerPage);
+        try {
+            JSONObject jObject = new JSONObject(pRecvServerPage);
+
+            userData = new User();
+            userData.setUser_no(jObject.getString("user_no"));
+            userData.setUser_name(jObject.getString("user_name"));
+            userData.setUser_email(jObject.getString("user_emil"));
+            userData.setUser_pw(jObject.getString("user_pw"));
+            userData.setUser_gender(jObject.getString("user_gender"));
+
+            Log.i("JSON을 파싱한 데이터 출력해보기"+" : ", userData.toString());
+            //}
+            return userData;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

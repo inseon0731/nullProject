@@ -26,6 +26,15 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 
 public class ExhibitionInfoActivity extends AppCompatActivity implements OnClickListener, NavigationView.OnNavigationItemSelectedListener{
 
@@ -37,6 +46,7 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements OnClick
     public static Intent cc;
     public static Intent dd;
     public static int men = -1;
+    private int un = 1, mn = 1, en = 1, buy = 0;
 
     private int[] tabIcons = {R.drawable.heart, R.drawable.clock, R.drawable.calender, R.drawable.loudspeaker};
 
@@ -112,8 +122,11 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements OnClick
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //프로그램을 종료한다
-                Toast.makeText(getApplicationContext(), items[selectedIndex[0]] + " 구매했습니다.",
-                        Toast.LENGTH_SHORT).show();
+                which++;
+                buy = which;
+                String result = SendByHttp("/insertJsonBuy.jsp");
+
+                Toast.makeText(getApplicationContext(), items[selectedIndex[0]] + " 구매했습니다.", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -177,6 +190,40 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements OnClick
         alertDialog.show();
 
         */
+    }
+
+    private String SendByHttp(String msg) {
+
+        if(msg == null)
+            msg = "";
+
+        //String URL = ServerUtil.SERVER_URL;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE/insertJsonBuy.jsp?un="+ un + "&mn=" + mn + "&en="+ en + "&bt=" + buy;
+        DefaultHttpClient client = new DefaultHttpClient();
+
+        try {
+			/* 체크할 값 서버로 전송 : 쿼리문이 아니라 넘어갈 uri주소 */
+            HttpPost post = new HttpPost(URL);
+			/* 지연시간 최대 3초 */
+            HttpParams params = client.getParams();
+            HttpConnectionParams.setConnectionTimeout(params, 5000);
+            HttpConnectionParams.setSoTimeout(params, 5000);
+
+			/* 데이터 보낸 뒤 서버에서 데이터를 받아오는 과정 */
+            HttpResponse response = client.execute(post);
+            BufferedReader bufreader = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent(), "euc-kr"));
+            String line = null;
+            String result = "";
+            while ((line = bufreader.readLine()) != null) {
+                result += line;
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            client.getConnectionManager().shutdown();	// 연결 지연 종료
+            return "";
+        }
     }
 
     @Override

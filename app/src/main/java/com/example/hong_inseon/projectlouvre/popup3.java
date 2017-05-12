@@ -4,23 +4,40 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.hong_inseon.projectlouvre.dao.Museum;
+import com.example.hong_inseon.projectlouvre.dao.Piece;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class popup3 extends AppCompatActivity {
     ImageView button;
     SeekBar seekbar;
     public static MediaPlayer mp;
 
-    private TextView playstart;
-    private TextView playlast;
+    private TextView playstart, playlast, cont;
     int m, time, timel;
     String str;
+
+    Piece pcData, getPcData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +76,15 @@ public class popup3 extends AppCompatActivity {
                     mp.seekTo(progress);
             }
         });
+
+        String result = SendByHttp("/getJsonMuseumList.jsp"); // 메시지를 서버에 보냄
+
+        Log.i("서버에서 받은 전체 내용 : ", result);
+        //String[][] parsedData = jsonParserList(); // 받은 메시지를 json 파싱결과를 museum객체에 저장
+        getPcData = jsonParser(result);
+
+        cont = (TextView)findViewById(R.id.doroktext3);
+        cont.setText(getPcData.getPc_name() + "\n" + getPcData.getPc_author() + "\n" + getPcData.getPc_make() + "\n" + getPcData.getPc_size() + "\n" + getPcData.getPc_exp());
     }
 
     /*public void onClickClosePopup3(View v) {
@@ -150,5 +176,81 @@ public class popup3 extends AppCompatActivity {
     public void onBackPressed() {
         mp.stop();
         this.finish();
+    }
+
+    private String SendByHttp(String msg) {
+
+        if(msg == null)
+            msg = "";
+
+        //String URL = ServerUtil.SERVER_URL;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE/getJsonPiece.jsp?ms=1&ex=1&pn=3";
+        DefaultHttpClient client = new DefaultHttpClient();
+
+        try {
+			/* 체크할 값 서버로 전송 : 쿼리문이 아니라 넘어갈 uri주소 */
+            HttpPost post = new HttpPost(URL);
+			/* 지연시간 최대 3초 */
+            HttpParams params = client.getParams();
+            HttpConnectionParams.setConnectionTimeout(params, 5000);
+            HttpConnectionParams.setSoTimeout(params, 5000);
+
+			/* 데이터 보낸 뒤 서버에서 데이터를 받아오는 과정 */
+            HttpResponse response = client.execute(post);
+            BufferedReader bufreader = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent(), "euc-kr"));
+            String line = null;
+            String result = "";
+            while ((line = bufreader.readLine()) != null) {
+                result += line;
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            client.getConnectionManager().shutdown();	// 연결 지연 종료
+            return "";
+        }
+    }
+
+    /**
+     * 받은 JSON 객체를 파싱하는 메소드
+     * @param pRecvServerPage
+     * @return
+     */
+    public Piece jsonParser(String pRecvServerPage) {
+        Log.i("서버에서 받은 전체 내용 : ", pRecvServerPage);
+        try {
+            JSONObject jObject = new JSONObject(pRecvServerPage);
+            //JSONArray jarray = jsonObject.getJSONArray("piece");
+
+            // 받아온 pRecvServerPage를 분석하는 부분
+//            for (int i = 0; i < jarray.length(); i++) {
+//                JSONObject jObject = jarray.getJSONObject(i);  // JSONObject 추출
+//
+//                if(jObject != null) { //museum 데이터 객체에 파싱한 값 저장.
+            pcData = new Piece();
+            pcData.setMs_no(jObject.getString("ms_no"));
+            pcData.setEx_no(jObject.getString("ex_no"));
+            pcData.setPc_no(jObject.getString("pc_no"));
+            pcData.setPc_name(jObject.getString("ms_exp"));
+            pcData.setPc_author(jObject.getString("ms_url"));
+            pcData.setPc_make(jObject.getString("ms_like"));
+            pcData.setPc_exp(jObject.getString("ms_address"));
+            pcData.setPc_img(jObject.getString("ms_holiday"));
+            pcData.setPc_audio(jObject.getString("ms_img"));
+            pcData.setPc_size(jObject.getString("ms_operating"));
+//                    arraylist.add(msData);
+//                }
+//            }
+
+            // 분해 된 데이터를 확인하기 위한 부분
+            //for(int i=0; i<jarray.length(); i++){
+            Log.i("JSON을 파싱한 데이터 출력해보기"+" : ", pcData.toString());
+            //}
+            return pcData;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -49,7 +49,7 @@ public class Exhibition {
 
     @Override
     public String toString() {
-        return "ExhiData [" +
+        return "Exhibition [" +
                 "ex_no='" + ex_no + '\'' +
                 ", ex_name='" + ex_name + '\'' +
                 ", ex_theme='" + ex_theme + '\'' +

@@ -8,12 +8,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class Cart extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -24,7 +34,9 @@ public class Cart extends AppCompatActivity implements NavigationView.OnNavigati
     int[] Image;
     boolean[] dorok, guide;
     ArrayList<Buy> arraylist = new ArrayList<Buy>();
+    Buy buyData;
     private int men;
+    private int un =1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +57,7 @@ public class Cart extends AppCompatActivity implements NavigationView.OnNavigati
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view4);
         navigationView.setNavigationItemSelectedListener(this);
 
-        name1 = new String[] { "China", "India", "United States",
+        /*name1 = new String[] { "China", "India", "United States",
                 "Indonesia", "Brazil", "Pakistan", "Nigeria", "Bangladesh",
                 "Russia", "Japan"};
 
@@ -75,7 +87,96 @@ public class Cart extends AppCompatActivity implements NavigationView.OnNavigati
         //리스트배열을 정리
 
         listh = new ListViewAdapterBuy(this, arraylist);
+        list.setAdapter(listh);*/
+
+        String result = SendByHttp("/getJsonBuy.jsp"); // 메시지를 서버에 보냄
+
+        Log.i("서버에서 받은 전체 내용 : ", result);
+        //String[][] parsedData = jsonParserList(); // 받은 메시지를 json 파싱결과를 museum객체에 저장
+        arraylist = jsonParserList(result);
+        listh = new ListViewAdapterBuy(this, arraylist);
+        //tvRecvData.setText(result);	// 받은 메시지를 화면에 보여주r기
+
         list.setAdapter(listh);
+    }
+
+    private String SendByHttp(String msg) {
+
+        if(msg == null)
+            msg = "";
+
+        //String URL = ServerUtil.SERVER_URL;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE/getJsonBuy.jsp?un="+un;
+        DefaultHttpClient client = new DefaultHttpClient();
+
+        try {
+			/* 체크할 값 서버로 전송 : 쿼리문이 아니라 넘어갈 uri주소 */
+            HttpPost post = new HttpPost(URL);
+			/* 지연시간 최대 3초 */
+            HttpParams params = client.getParams();
+            HttpConnectionParams.setConnectionTimeout(params, 5000);
+            HttpConnectionParams.setSoTimeout(params, 5000);
+
+			/* 데이터 보낸 뒤 서버에서 데이터를 받아오는 과정 */
+            HttpResponse response = client.execute(post);
+            BufferedReader bufreader = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent(), "euc-kr"));
+            String line = null;
+            String result = "";
+            while ((line = bufreader.readLine()) != null) {
+                result += line;
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            client.getConnectionManager().shutdown();	// 연결 지연 종료
+            return "";
+        }
+    }
+
+    /**
+     * 받은 JSON 객체를 파싱하는 메소드
+     * @param pRecvServerPage
+     * @return
+     */
+    public ArrayList jsonParserList(String pRecvServerPage) {
+        Log.i("서버에서 받은 전체 내용 : ", pRecvServerPage);
+        try {
+            JSONObject jsonObject = new JSONObject(pRecvServerPage);
+            JSONArray jarray = jsonObject.getJSONArray("buys");
+            int check=0;
+            boolean check2 = false;
+
+            // 받아온 pRecvServerPage를 분석하는 부분
+            for (int i = 0; i < jarray.length(); i++) {
+                JSONObject jObject = jarray.getJSONObject(i);  // JSONObject 추출
+
+                if(jObject != null) { //museum 데이터 객체에 파싱한 값 저장.
+                    buyData = new Buy();
+                    buyData.setNameExhibit(jObject.getString("ms_no"));
+                    buyData.setNameMuseum(jObject.getString("ex_no"));
+                    buyData.setImage(jObject.getString("ex_img"));
+                    check = Integer.parseInt(jObject.getString("buy_type"));
+                    if(check%2 == 1)
+                        check2 = true; // 도록 먼저 확인
+                    buyData.setDorok(check2);
+                    check2 = false;
+                    if(check/2 == 1)
+                        check2 = true;
+                    buyData.setGuide(check2);
+                    arraylist.add(buyData);
+                }
+            }
+
+            // 분해 된 데이터를 확인하기 위한 부분
+            for(int i=0; i<jarray.length(); i++){
+                Log.i("JSON을 파싱한 데이터 출력해보기"+i+" : ", buyData.toString());
+            }
+            return arraylist;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
