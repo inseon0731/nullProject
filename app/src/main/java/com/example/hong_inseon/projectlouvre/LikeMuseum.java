@@ -103,7 +103,7 @@ public class LikeMuseum extends AppCompatActivity implements NavigationView.OnNa
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE11/getJsonMuseumList.jsp";
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE12/getJsonMuseumList.jsp";
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
@@ -140,7 +140,7 @@ public class LikeMuseum extends AppCompatActivity implements NavigationView.OnNa
         Log.i("서버에서 받은 전체 내용 : ", pRecvServerPage);
         try {
             JSONObject jsonObject = new JSONObject(pRecvServerPage);
-            JSONArray jarray = jsonObject.getJSONArray("museum");
+            JSONArray jarray = jsonObject.getJSONArray("museums");
 
             // 받아온 pRecvServerPage를 분석하는 부분
             for (int i = 0; i < jarray.length(); i++) {
@@ -158,7 +158,7 @@ public class LikeMuseum extends AppCompatActivity implements NavigationView.OnNa
                     msData.setMs_holiday(jObject.getString("ms_holiday"));
                     msData.setMs_Img(jObject.getString("ms_img"));
                     msData.setMs_operating(jObject.getString("ms_operating"));
-                    msData.setMs_phone(jObject.getString("ms_phone"));
+                    msData.setMs_phone(jObject.getString("ms_tel"));
                     arraylist.add(msData);
                 }
             }

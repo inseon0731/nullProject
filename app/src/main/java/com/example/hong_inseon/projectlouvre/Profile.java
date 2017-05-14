@@ -1,6 +1,7 @@
 package com.example.hong_inseon.projectlouvre;
 
 import android.content.Intent;
+import android.os.StrictMode;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -39,6 +40,12 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        if (android.os.Build.VERSION.SDK_INT > 9)
+        {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarP);
         setSupportActionBar(toolbar);
@@ -138,7 +145,7 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE/getJsonUser.jsp?un="+un;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE12/getJsonUser.jsp?un="+un;
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
@@ -179,7 +186,7 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
             userData = new User();
             userData.setUser_no(jObject.getString("user_no"));
             userData.setUser_name(jObject.getString("user_name"));
-            userData.setUser_email(jObject.getString("user_emil"));
+            userData.setUser_email(jObject.getString("user_email"));
             userData.setUser_pw(jObject.getString("user_pw"));
             userData.setUser_gender(jObject.getString("user_gender"));
 

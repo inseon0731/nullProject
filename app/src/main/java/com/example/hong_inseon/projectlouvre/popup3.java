@@ -184,7 +184,7 @@ public class popup3 extends AppCompatActivity {
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE/getJsonPiece.jsp?ms=1&ex=1&pn=3";
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE12/getJsonPiece.jsp?ms=1&ex=1&pn=3";
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {

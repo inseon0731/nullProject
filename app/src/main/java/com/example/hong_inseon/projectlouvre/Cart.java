@@ -2,6 +2,7 @@ package com.example.hong_inseon.projectlouvre;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -42,6 +43,12 @@ public class Cart extends AppCompatActivity implements NavigationView.OnNavigati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
+
+        if (android.os.Build.VERSION.SDK_INT > 9)
+        {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         men = -1;
 
@@ -89,6 +96,8 @@ public class Cart extends AppCompatActivity implements NavigationView.OnNavigati
         listh = new ListViewAdapterBuy(this, arraylist);
         list.setAdapter(listh);*/
 
+        list = (ListView)findViewById(R.id.listViewCart);
+
         String result = SendByHttp("/getJsonBuy.jsp"); // 메시지를 서버에 보냄
 
         Log.i("서버에서 받은 전체 내용 : ", result);
@@ -96,6 +105,9 @@ public class Cart extends AppCompatActivity implements NavigationView.OnNavigati
         arraylist = jsonParserList(result);
         listh = new ListViewAdapterBuy(this, arraylist);
         //tvRecvData.setText(result);	// 받은 메시지를 화면에 보여주r기
+
+        Log.i("@@@", "" + arraylist);
+        Log.i("###","" + listh);
 
         list.setAdapter(listh);
     }
@@ -106,7 +118,7 @@ public class Cart extends AppCompatActivity implements NavigationView.OnNavigati
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE/getJsonBuy.jsp?un="+un;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE12/getJsonBuy.jsp?un="+un;
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {

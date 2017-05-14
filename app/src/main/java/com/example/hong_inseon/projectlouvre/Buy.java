@@ -9,6 +9,17 @@ public class Buy {
     //private int image;
     private boolean isDorok, isGuide;
 
+    @Override
+    public String toString() {
+        return "Exhibition [" +
+                "ex_no='" + nameExhibit + '\'' +
+                ", ex_name='" + nameMuseum + '\'' +
+                ", ex_theme='" + image + '\'' +
+                ", ex_like='" + isDorok + '\'' +
+                ", ex_img='" + isGuide + '\'' +
+                ']';
+    }
+
     public Buy(String nameExhibit, String nameMuseum, String image, boolean isDorok, boolean isGuide) {
         this.nameExhibit = nameExhibit;
         this.nameMuseum = nameMuseum;

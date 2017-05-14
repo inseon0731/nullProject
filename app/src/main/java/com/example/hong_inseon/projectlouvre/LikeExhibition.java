@@ -100,6 +100,7 @@ public class LikeExhibition extends AppCompatActivity implements NavigationView.
         String result = SendByHttp("/getJsonExhibitionList.jsp");
 
         arraylist = jsonParserList(result);
+        Log.i("@@@", ""+arraylist);
         listh = new ListViewAdapterExhibition(this, arraylist);
         list.setAdapter(listh);
     }
@@ -110,7 +111,7 @@ public class LikeExhibition extends AppCompatActivity implements NavigationView.
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE/getJsonExhibitionList.jsp";
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE12/getJsonExhibitionList.jsp";
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
@@ -143,6 +144,8 @@ public class LikeExhibition extends AppCompatActivity implements NavigationView.
         try {
             JSONObject jsonObject = new JSONObject(pRecvServerPage);
             JSONArray jarray = jsonObject.getJSONArray("exhibitions");
+
+            Log.i("@@@", ""+jarray);
 
             // 받아온 pRecvServerPage를 분석하는 부분
             for (int i = 0; i < jarray.length(); i++) {

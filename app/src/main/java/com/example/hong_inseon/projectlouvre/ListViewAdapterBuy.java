@@ -69,7 +69,7 @@ public class ListViewAdapterBuy extends BaseAdapter {
 
         holder.name1.setText(buylist.get(position).getNameExhibit());
         holder.name2.setText(buylist.get(position).getNameMuseum());
-        holder.image.setImageResource(buylist.get(position).getImage());
+        //holder.image.setImageResource(Integer.parseInt(buylist.get(position).getImage()));
         if(buylist.get(position).Dorok())
             holder.dorok.setBackgroundResource(R.drawable.blue);
         if(buylist.get(position).Guide())

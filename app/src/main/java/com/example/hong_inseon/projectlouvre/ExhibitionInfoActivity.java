@@ -198,7 +198,7 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements OnClick
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE/insertJsonBuy.jsp?un="+ un + "&mn=" + mn + "&en="+ en + "&bt=" + buy;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE12/insertJsonBuy.jsp?un="+ un + "&mn=" + mn + "&en="+ en + "&bt=" + buy;
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
