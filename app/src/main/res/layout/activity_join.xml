@@ -13,74 +13,76 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.hong_inseon.projectlouvre.JoinActivity">
 
-    <!--
-        <TextView
-            android:text="GENDER"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView10"
-            android:layout_marginTop="11dp"
-            android:layout_below="@+id/etName"
-            android:layout_alignStart="@+id/textView8"/>
-        <RadioButton
-            android:text="남"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/rbm"
-            android:layout_below="@+id/etName"
-            android:layout_alignStart="@+id/etName"/>
-        <RadioButton
-            android:text="여"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/rbf"
-            android:layout_below="@+id/etName"
-            android:layout_toEndOf="@+id/rbm"
-            android:layout_marginStart="17dp"/>
-    -->
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:hint="Email"
-        android:id="@+id/etEmail"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:hint="Password"
-        android:id="@+id/etPassword"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:hint="Password"
-        android:id="@+id/etPasswordConfirm"/>
-
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/etEmail"
+            android:hint="email"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/etName"
+            android:hint="name"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/etPassword"
+            android:hint="pw"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text|textPersonName"
+            android:ems="10"
+            android:id="@+id/etPasswordConfirm"
+            android:hint="pwConfirm"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroupGender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:text="남"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rbtnM"
+                android:layout_weight="1"/>
+
+            <RadioButton
+                android:text="여"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rbtnF"
+                android:layout_weight="1"/>
+
+        </RadioGroup>
 
         <Button
-            android:text="취소"
-            android:layout_width="wrap_content"
+            android:text="뒤로가기"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btnCancel"
-            android:layout_weight="1"/>
+            android:id="@+id/cancle"/>
 
         <Button
-            android:text="확인"
-            android:layout_width="wrap_content"
+            android:id="@+id/btnJoin"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btnDone"
-            android:layout_weight="1"/>
+            android:text="가입하기"/>
+
     </LinearLayout>
 
 
