@@ -111,7 +111,7 @@ public class LikeExhibition extends AppCompatActivity implements NavigationView.
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE12/getJsonExhibitionList.jsp";
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE14/getJsonExhibitionList.jsp";
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
@@ -245,4 +245,6 @@ public class LikeExhibition extends AppCompatActivity implements NavigationView.
     public void log(View v) {
         startActivity(new Intent(this, LoginActivity.class));
     }
+
+    public void navJoin(View v) {  startActivity(new Intent(this, JoinActivity.class));}
 }

@@ -34,12 +34,15 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
     private int men;
     private int un = 1;
     private TextView tv;
+    private String pw;
     User userData, getUserData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        //un = LoginActivity.un;
 
         if (android.os.Build.VERSION.SDK_INT > 9)
         {
@@ -131,7 +134,10 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
         switch (v.getId())
         {
             case R.id.buttonPReplace :
-
+                tv = (TextView)findViewById(R.id.textView14);
+                pw = tv.getText().toString();
+                String result = SendByHttp2("/updateJsonUser.jsp"); // 메시지를 서버에 보냄
+                getUserData = jsonParser(result);
                 break ;
             case R.id.buttonPBack :
                 onBackPressed();
@@ -145,7 +151,41 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE12/getJsonUser.jsp?un="+un;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE14/getJsonUser.jsp?un="+un;
+        DefaultHttpClient client = new DefaultHttpClient();
+
+        try {
+			/* 체크할 값 서버로 전송 : 쿼리문이 아니라 넘어갈 uri주소 */
+            HttpPost post = new HttpPost(URL);
+			/* 지연시간 최대 3초 */
+            HttpParams params = client.getParams();
+            HttpConnectionParams.setConnectionTimeout(params, 5000);
+            HttpConnectionParams.setSoTimeout(params, 5000);
+
+			/* 데이터 보낸 뒤 서버에서 데이터를 받아오는 과정 */
+            HttpResponse response = client.execute(post);
+            BufferedReader bufreader = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent(), "euc-kr"));
+            String line = null;
+            String result = "";
+            while ((line = bufreader.readLine()) != null) {
+                result += line;
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            client.getConnectionManager().shutdown();	// 연결 지연 종료
+            return "";
+        }
+    }
+
+    private String SendByHttp2(String msg) {
+
+        if(msg == null)
+            msg = "";
+
+        //String URL = ServerUtil.SERVER_URL;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE14/updateJsonUser.jsp?un="+un + "&np=" + pw;
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
@@ -198,4 +238,10 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
             return null;
         }
     }
+
+    public void log(View v) {
+        startActivity(new Intent(this, LoginActivity.class));
+    }
+
+    public void navJoin(View v) {  startActivity(new Intent(this, JoinActivity.class));}
 }

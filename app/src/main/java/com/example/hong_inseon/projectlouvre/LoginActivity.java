@@ -10,9 +10,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.hong_inseon.projectlouvre.dao.User;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,11 +30,19 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPassword;
     private Button btnJoin;
     private Button btnLogin;
+    public static int un = 0;
+
+    User userData, getUserData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         etEmail = (EditText) findViewById(R.id.etEmail);
         etPassword = (EditText) findViewById(R.id.etPassword);
@@ -42,60 +54,55 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private String SendByHttp(String msg) {
-        if (msg == null) {
-            msg = "";
-        }
 
-        // 웹서버 주소 설정
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE10/getLogin.jsp";
+        if(msg == null)
+            msg = "";
+
+        //String URL = ServerUtil.SERVER_URL;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE14/getJsonLogin.jsp?ue=" + etEmail.getText().toString() + "&up=" + etPassword.getText().toString();
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
-            /* 체크할 id와 pw값 서버로 전송 */
-            HttpPost post = new HttpPost(URL + "?etEmail=" + etEmail.getText().toString() + "&etPassword=" + etPassword.getText().toString());
+			/* 체크할 값 서버로 전송 : 쿼리문이 아니라 넘어갈 uri주소 */
+            HttpPost post = new HttpPost(URL);
+			/* 지연시간 최대 3초 */
+            HttpParams params = client.getParams();
+            HttpConnectionParams.setConnectionTimeout(params, 5000);
+            HttpConnectionParams.setSoTimeout(params, 5000);
 
-            /* 데이터 보낸 뒤 서버에서 데이터를 받아오는 과정 */
+			/* 데이터 보낸 뒤 서버에서 데이터를 받아오는 과정 */
             HttpResponse response = client.execute(post);
-
-            BufferedReader bufreader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "utf-8"));
+            BufferedReader bufreader = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent(), "euc-kr"));
             String line = null;
             String result = "";
-
             while ((line = bufreader.readLine()) != null) {
                 result += line;
             }
             return result;
-        } catch (Exception e) { // 예외처리
+        } catch (Exception e) {
             e.printStackTrace();
-            client.getConnectionManager().shutdown(); // 연결 지연 종료
+            client.getConnectionManager().shutdown();	// 연결 지연 종료
             return "";
         }
     }
 
-    // 받아온 데이터 파싱하는 함수
-    public String[][] jsonParserList(String pRecvServerPage) {
-        Log.i("서버에서 받은 전체 내용", pRecvServerPage); // 받아온 데이터 확인
-
+    public User jsonParser(String pRecvServerPage) {
+        Log.i("서버에서 받은 전체 내용 : ", pRecvServerPage);
         try {
-            JSONObject json = new JSONObject(pRecvServerPage);
-            JSONArray jArr = json.getJSONArray("LoginResult");
+            JSONObject jObject = new JSONObject(pRecvServerPage);
 
-            // 받아온 pRecvServerPage를 분석하는 부분
-            String[] jsonName = {"Result", "Result2"};
-            String[][] parseredData = new String[jArr.length()][jsonName.length];
-            for (int i = 0; i < jArr.length(); i++) {
-                json = jArr.getJSONObject(i);
-                for (int j = 0; j < jsonName.length; j++) {
-                    parseredData[i][j] = json.getString(jsonName[j]);
-                }
-            }
+            userData = new User();
+            userData.setUser_no(jObject.getString("user_no"));
+            userData.setUser_name(jObject.getString("user_name"));
+            userData.setUser_email(jObject.getString("user_email"));
+            userData.setUser_pw(jObject.getString("user_pw"));
+            userData.setUser_gender(jObject.getString("user_gender"));
 
-            // 분해 된 데이터를 확인하기 위한 부분
-            for (int i = 0; i < parseredData.length; i++) {
-                Log.i("JSON을 분석한 데이터" + i + ":", parseredData[i][0]);
-            }
-            return parseredData; // 파싱한 데이터 넘김
-        } catch (JSONException e) { // 예외처리
+            Log.i("JSON을 파싱한 데이터 출력해보기"+" : ", userData.toString());
+            //}
+            return userData;
+        } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }
@@ -108,52 +115,32 @@ public class LoginActivity extends AppCompatActivity {
 
             switch (view.getId()) {
                 case R.id.btnLogin:
-                    if (android.os.Build.VERSION.SDK_INT > 9) {
-                        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                        StrictMode.setThreadPolicy(policy);
-                    }
-
-                    String loginid = etEmail.getText().toString();
-
-                    try {
-                        String result = SendByHttp(loginid);
-                        String[][] parsedData = jsonParserList(result);
-                        if (parsedData[0][0].equals("succed")) {
-                            Toast.makeText(LoginActivity.this, "로그인", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else if (parsedData[0][0].equals("false")) {
-                            Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호가 틀렸음", Toast.LENGTH_SHORT).show();
-                            etEmail.setText("");
-                            etPassword.setText("");
-                        } else if (parsedData[0][0].equals("noId")) {
-                            Toast.makeText(LoginActivity.this, "존재하지 않는 아이디", Toast.LENGTH_SHORT).show();
-                            etEmail.setText("");
-                            etPassword.setText("");
+                    if(etEmail.getText().toString().length() == 0)
+                        if(etPassword.getText().toString().length() == 0) {
+                            Toast.makeText(LoginActivity.this, "이메일과 비밀번호를 정확히 입력해 주세요", Toast.LENGTH_SHORT).show();
+                            return;
                         }
-                    } catch (Exception e) {
+                    String result = SendByHttp("/getJsonLogin.jsp"); // 메시지를 서버에 보냄
+                    Log.i("서버에서 받은 전체 내용 : ", result);
+                    getUserData = jsonParser(result);
+                    try {
+                    if(getUserData.getUser_no() == "")
+                    {
+                        Toast.makeText(LoginActivity.this, "이메일과 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }}
+                    catch(Exception e) {
+                        Toast.makeText(LoginActivity.this, "로그인 오류", Toast.LENGTH_SHORT).show();
+                        return;
                     }
+                    Toast.makeText(LoginActivity.this, "로그인하였습니다.", Toast.LENGTH_SHORT).show();
+                    un = Integer.parseInt(getUserData.getUser_no());
+                    LoginActivity.this.finish();
                     break;
 
-
                 case R.id.btnJoin:
-                    String joinid = etEmail.getText().toString();
-                    String joinpwd = etPassword.getText().toString();
-                    try {
-                        String result = SendByHttp(joinid);
-                        // String result  = new UserTask().execute(joinid,joinpwd,"join").get();
-                        if (result.equals("id")) {
-                            Toast.makeText(LoginActivity.this, "이미 존재하는 아이디입니다.", Toast.LENGTH_SHORT).show();
-                            etEmail.setText("");
-                            etPassword.setText("");
-                        } else if (result.equals("ok")) {
-                            etEmail.setText("");
-                            etPassword.setText("");
-                            Toast.makeText(LoginActivity.this, "회원가입을 축하합니다.", Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (Exception e) {
-                    }
+                    Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
+                    startActivity(intent);
                     break;
             }
         } //onclick 끝

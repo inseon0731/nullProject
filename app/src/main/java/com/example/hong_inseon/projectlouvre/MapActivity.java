@@ -96,7 +96,7 @@ public class MapActivity extends AppCompatActivity {
     private ImageView view;
     private int rwidth, rheight;
 
-    private double place[][] = {{300.0d,450.0d},{550.0d,880.0d},{700.0d,1380.0d}};//작품들의 위치를 표시 가로 50에 세로 100을 빼야 한다
+    private double place[][] = {{300.0d,450.0d},{550.0d,880.0d},{600.0d,1380.0d}};//작품들의 위치를 표시 가로 50에 세로 100을 빼야 한다
     private double placeR[][] = {{place[0][0]/WMd, place[0][1]/HMd},{place[1][0]/WMd, place[1][1]/HMd},{place[2][0]/WMd, place[2][1]/HMd}};
 
     private BluetoothManager bm;    //기본적으로 존재

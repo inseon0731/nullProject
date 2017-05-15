@@ -51,7 +51,7 @@
             android:hint="pwConfirm"/>
 
         <RadioGroup
-            android:id="@+id/radioGroupGender"
+            android:id="@+id/radioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -75,10 +75,10 @@
             android:text="뒤로가기"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/cancle"/>
+            android:id="@+id/btnCancel"/>
 
         <Button
-            android:id="@+id/btnJoin"
+            android:id="@+id/btnDone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="가입하기"/>

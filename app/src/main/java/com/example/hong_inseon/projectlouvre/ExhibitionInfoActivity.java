@@ -56,6 +56,8 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements OnClick
         //?? 에러있는 듯?
         setContentView(R.layout.activity_exhibition_info_drawer);
 
+        //un = LoginActivity.un;
+
         aa = new Intent(this, Cart.class);
         bb = new Intent(this, Profile.class);
         cc = new Intent(this, LikeExhibition.class);
@@ -198,7 +200,7 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements OnClick
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE12/insertJsonBuy.jsp?un="+ un + "&mn=" + mn + "&en="+ en + "&bt=" + buy;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE14/insertJsonBuy.jsp?un="+ un + "&mn=" + mn + "&en="+ en + "&bt=" + buy;
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
@@ -307,6 +309,8 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements OnClick
     public void map(View v) {
         startActivity(new Intent(this, MapActivity.class));
     }
+
+    public void navJoin(View v) {  startActivity(new Intent(this, JoinActivity.class));}
 
     class PagerAdapter extends FragmentStatePagerAdapter {
         int _numOfTabs;

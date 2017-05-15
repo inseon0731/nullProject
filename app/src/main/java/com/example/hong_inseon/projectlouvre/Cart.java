@@ -50,6 +50,8 @@ public class Cart extends AppCompatActivity implements NavigationView.OnNavigati
             StrictMode.setThreadPolicy(policy);
         }
 
+        //un = LoginActivity.un;
+
         men = -1;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar4);
@@ -118,7 +120,7 @@ public class Cart extends AppCompatActivity implements NavigationView.OnNavigati
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE12/getJsonBuy.jsp?un="+un;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE14/getJsonBuy.jsp?un="+un;
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
@@ -243,4 +245,6 @@ public class Cart extends AppCompatActivity implements NavigationView.OnNavigati
     public void log(View v) {
         startActivity(new Intent(this, LoginActivity.class));
     }
+
+    public void navJoin(View v) {  startActivity(new Intent(this, JoinActivity.class));}
 }

@@ -31,7 +31,7 @@ public class popup2 extends AppCompatActivity {
         playstart = (TextView)findViewById(R.id.textplaystart2);
         playlast = (TextView)findViewById(R.id.textplaylast2);
 
-        mp = MediaPlayer.create(this, R.raw.music2);
+        mp = MediaPlayer.create(this, R.raw.music5);
         mp.start();
         Thread();
         mp.setLooping(true);
@@ -57,6 +57,16 @@ public class popup2 extends AppCompatActivity {
                 // TODO Auto-generated method stub
                 if (fromUser)
                     mp.seekTo(progress);
+                time= mp.getCurrentPosition()/1000;
+                m = time/60;
+                time = time%60;
+                str = m+" : "+ time;
+                playstart.setText(str);
+                timel= mp.getDuration()/1000 - mp.getCurrentPosition()/1000;
+                m = timel/60;
+                timel = timel%60;
+                str = String.format("%d : %d", m, timel);
+                playlast.setText(str);
             }
         });
     }
@@ -120,16 +130,6 @@ public class popup2 extends AppCompatActivity {
                      * music.getCurrentPosition()은 현재 음악 재생 위치를 가져오는 구문 입니다
                      */
                     seekbar.setProgress(mp.getCurrentPosition());
-                    time= mp.getCurrentPosition()/1000;
-                    m = time/60;
-                    time = time%60;
-                    str = m+" : "+ time;
-                    playstart.setText(str);
-                    timel= mp.getDuration()/1000 - mp.getCurrentPosition()/1000;
-                    m = timel/60;
-                    timel = timel%60;
-                    str = String.format("%d : %d", m, timel);
-                    playlast.setText(str);
                 }
             }
         };

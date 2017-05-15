@@ -198,4 +198,6 @@ public class MayBeMain extends AppCompatActivity implements NavigationView.OnNav
     public void log(View v) {
         startActivity(new Intent(this, LoginActivity.class));
     }
+
+    public void navJoin(View v) {  startActivity(new Intent(this, JoinActivity.class));}
 }

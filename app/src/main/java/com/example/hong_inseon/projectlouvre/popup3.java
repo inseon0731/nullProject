@@ -48,7 +48,7 @@ public class popup3 extends AppCompatActivity {
         playstart = (TextView)findViewById(R.id.textplaystart3);
         playlast = (TextView)findViewById(R.id.textplaylast3);
 
-        mp = MediaPlayer.create(this, R.raw.music3);
+        mp = MediaPlayer.create(this, R.raw.music6);
         mp.start();
         Thread();
         mp.setLooping(true);
@@ -184,7 +184,7 @@ public class popup3 extends AppCompatActivity {
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE12/getJsonPiece.jsp?ms=1&ex=1&pn=3";
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE14/getJsonPiece.jsp?mn=1&en=1&pn=3";
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
@@ -232,13 +232,13 @@ public class popup3 extends AppCompatActivity {
             pcData.setMs_no(jObject.getString("ms_no"));
             pcData.setEx_no(jObject.getString("ex_no"));
             pcData.setPc_no(jObject.getString("pc_no"));
-            pcData.setPc_name(jObject.getString("ms_exp"));
-            pcData.setPc_author(jObject.getString("ms_url"));
-            pcData.setPc_make(jObject.getString("ms_like"));
-            pcData.setPc_exp(jObject.getString("ms_address"));
-            pcData.setPc_img(jObject.getString("ms_holiday"));
-            pcData.setPc_audio(jObject.getString("ms_img"));
-            pcData.setPc_size(jObject.getString("ms_operating"));
+            pcData.setPc_name(jObject.getString("pc_name"));
+            pcData.setPc_author(jObject.getString("pc_author"));
+            pcData.setPc_make(jObject.getString("pc_make"));
+            pcData.setPc_exp(jObject.getString("pc_exp"));
+            pcData.setPc_img(jObject.getString("pc_img"));
+            pcData.setPc_audio(jObject.getString("pc_audio"));
+            pcData.setPc_size(jObject.getString("pc_size"));
 //                    arraylist.add(msData);
 //                }
 //            }

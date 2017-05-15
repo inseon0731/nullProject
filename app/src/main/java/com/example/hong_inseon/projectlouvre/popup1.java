@@ -91,7 +91,7 @@ public class popup1 extends AppCompatActivity {
         playstart = (TextView)findViewById(R.id.textplaystart1);
         playlast = (TextView)findViewById(R.id.textplaylast1);
 
-        mp = MediaPlayer.create(popup1.this, R.raw.music1);
+        mp = MediaPlayer.create(popup1.this, R.raw.music4);
 
         mp.start();
         Thread();
