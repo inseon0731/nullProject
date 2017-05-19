@@ -3,11 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/main">
 
-    <Button
+    <!--<Button
         android:id="@+id/button1"
         android:layout_width="33dp"
         android:layout_height="wrap_content"
@@ -24,7 +25,7 @@
         android:layout_marginTop="102dp"
         android:onClick="reset"
         android:text="reset"
-        android:visibility="visible" />
+        android:visibility="visible" />-->
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -37,10 +38,129 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:srcCompat="@drawable/picture2"
+            app:srcCompat="@drawable/mapstd"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:id="@+id/imageView" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="48dp"
+            android:layout_marginLeft="1dp"
+            android:foregroundGravity="center"
+            android:visibility="visible"
+            app:srcCompat="@android:drawable/presence_invisible"
+            tools:ignore="ContentDescription"
+            android:layout_marginEnd="148dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true" />
+
+        <ImageView
+            android:id="@+id/imageView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="69dp"
+            android:foregroundGravity="center"
+            android:visibility="visible"
+            app:srcCompat="@android:drawable/presence_invisible"
+            tools:ignore="ContentDescription"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/imageView5" />
+
+        <ImageView
+            android:id="@+id/imageView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="88dp"
+            android:layout_marginLeft="1dp"
+            android:foregroundGravity="center"
+            android:visibility="visible"
+            app:srcCompat="@android:drawable/presence_invisible"
+            tools:ignore="ContentDescription"
+            android:layout_alignTop="@+id/imageView5"
+            android:layout_toStartOf="@+id/imageView5" />
+
+        <ImageView
+            android:id="@+id/imageView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:foregroundGravity="center"
+            android:visibility="visible"
+            app:srcCompat="@android:drawable/presence_invisible"
+            tools:ignore="ContentDescription"
+            android:layout_alignTop="@+id/imageView14"
+            android:layout_alignStart="@+id/imageView15"
+            android:layout_marginStart="18dp" />
+
+        <ImageView
+            android:id="@+id/imageView17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:foregroundGravity="center"
+            android:visibility="visible"
+            app:srcCompat="@android:drawable/presence_invisible"
+            tools:ignore="ContentDescription"
+            android:layout_above="@+id/imageView18"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="33dp" />
+
+        <ImageView
+            android:id="@+id/imageView18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/imageView17"
+            android:layout_below="@+id/imageView16"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="102dp"
+            android:foregroundGravity="center"
+            android:visibility="visible"
+            app:srcCompat="@android:drawable/presence_invisible"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/imageView19"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/imageView18"
+            android:layout_below="@+id/imageView18"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="99dp"
+            android:foregroundGravity="center"
+            android:visibility="visible"
+            app:srcCompat="@android:drawable/presence_invisible"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/imageView20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/imageView15"
+            android:layout_alignStart="@+id/imageView17"
+            android:layout_marginBottom="68dp"
+            android:layout_marginLeft="1dp"
+            android:foregroundGravity="center"
+            android:visibility="visible"
+            app:srcCompat="@android:drawable/presence_invisible"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/imageView21"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:foregroundGravity="center"
+            android:visibility="visible"
+            app:srcCompat="@android:drawable/presence_invisible"
+            tools:ignore="ContentDescription"
+            android:layout_marginStart="27dp"
+            android:layout_marginBottom="11dp"
+            android:layout_above="@+id/imageView19"
+            android:layout_toEndOf="@+id/imageView14" />
 
     </RelativeLayout>
     <ListView

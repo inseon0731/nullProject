@@ -1,41 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="75dp"
-        android:layout_height="75dp"
         android:id="@+id/imageMuseum"
+        android:padding="5dp"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:adjustViewBounds="false"
+        android:cropToPadding="false"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/bazille" />
 
     <TextView
         android:text="TextView"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="28dp"
         android:gravity="center_vertical"
         android:id="@+id/nameMuseum"
         android:layout_toEndOf="@+id/imageMuseum" />
 
     <RatingBar
-        android:text="TextView"
-        style="?android:attr/ratingBarStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:gravity="bottom"
         android:id="@+id/ratingMuseum"
+        style="?android:attr/ratingBarStyleSmall"
+        android:padding="5dp"
+        android:layout_width="90dp"
+        android:layout_height="28dp"
+        android:layout_below="@+id/nameMuseum"
+        android:layout_toEndOf="@+id/imageMuseum"
+        android:gravity="bottom"
+        android:numStars="5"
         android:rating="3.5"
         android:stepSize="0.5"
-        android:numStars="5"
-        android:layout_below="@+id/nameMuseum"
-        android:layout_toEndOf="@+id/imageMuseum" />
+        android:text="TextView" />
 
     <TextView
         android:text="TextView"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="28dp"
         android:gravity="center_vertical"
         android:id="@+id/addrMuseum"
         android:layout_below="@+id/ratingMuseum"

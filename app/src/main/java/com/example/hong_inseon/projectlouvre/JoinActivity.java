@@ -168,7 +168,7 @@ public class JoinActivity extends AppCompatActivity {
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE14/insertJsonUser.jsp?ue="+ etEmail.getText() + "&un=" + etName.getText() + "&pw=" + etPassword.getText() + "&gd=" + rbi;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE16/insertJsonUser.jsp?ue="+ etEmail.getText() + "&un=" + etName.getText() + "&pw=" + etPassword.getText() + "&gd=" + rbi;
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {

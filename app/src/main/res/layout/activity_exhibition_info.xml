@@ -29,7 +29,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/munch"
+                app:srcCompat="@drawable/goryu"
                 android:scaleType="centerCrop"
                 android:id="@+id/imageView"/>
 
@@ -114,20 +114,12 @@
             android:layout_height="50dp">
 
             <Button
-                android:text="*"
-                android:background="@color/colorButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/buttonBuy"
-                />
-
-            <Button
                 android:text="구매옵션"
                 android:background="@color/colorButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonBuyOpt"
-                android:layout_weight="1"/>
+                android:layout_weight="0.69"/>
 
         </LinearLayout>
     </LinearLayout>

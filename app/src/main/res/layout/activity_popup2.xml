@@ -21,11 +21,12 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
 
-        <WebView
-            android:id="@+id/dorokimage2"
+        <ImageView
+            android:id="@+id/ms5_ex13_pc9"
             android:layout_width="match_parent"
             android:layout_height="191dp"
-            android:layout_weight="0.49"/>
+            android:layout_weight="0.49"
+            app:srcCompat="@drawable/pic2" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -62,7 +63,7 @@
             >
 
             <TextView
-                android:text="2:01"
+                android:text="0 : 00"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textplaystart2"
@@ -75,7 +76,7 @@
                 android:layout_weight="1"/>
 
             <TextView
-                android:text="0:24"
+                android:text="0 : 00"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textplaylast2"
@@ -90,7 +91,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="43dp"
+            android:layout_height="50dp"
             android:layout_weight="0.37">
 
             <ImageButton
@@ -112,11 +113,18 @@
                 android:background="@drawable/play_back"/>
 
             <ImageButton
-                android:id="@+id/play2"
-                android:onClick="onClickPopupB1"
+                android:id="@+id/stop2"
+                android:onClick="onClickPopupB2"
                 android:layout_height="50dp"
                 android:layout_width="50dp"
-                android:background="@drawable/play_white"/>
+                android:background="@drawable/stop"/>
+
+            <ImageButton
+                android:id="@+id/playpause2"
+                android:onClick="onClickPopupB2"
+                android:layout_height="50dp"
+                android:layout_width="50dp"
+                android:background="@drawable/play"/>
 
             <ImageButton
                 android:id="@+id/playpre2"

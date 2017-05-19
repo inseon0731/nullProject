@@ -96,7 +96,7 @@ public class popup1 extends AppCompatActivity {
         mp.start();
         Thread();
 
-        button = (ImageView) findViewById(R.id.play1);
+        button = (ImageView) findViewById(R.id.playpause1);
 
         seekbar.setMax(mp.getDuration());
 
@@ -119,12 +119,18 @@ public class popup1 extends AppCompatActivity {
                 time= mp.getCurrentPosition()/1000;
                 m = time/60;
                 time = time%60;
-                str = m+" : "+ time;
+                if(time >= 10)
+                    str = String.format("%d : %d", m, time);
+                else
+                    str = m + " : 0" + time;
                 playstart.setText(str);
                 timel= mp.getDuration()/1000 - mp.getCurrentPosition()/1000;
                 m = timel/60;
                 timel = timel%60;
-                str = String.format("%d : %d", m, timel);
+                if(timel >= 10)
+                    str = String.format("%d : %d", m, timel);
+                else
+                    str = m + " : 0" + timel;
                 playlast.setText(str);
             }
         });

@@ -151,7 +151,7 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE14/getJsonUser.jsp?un="+un;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE16/getJsonUser.jsp?un="+un;
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {

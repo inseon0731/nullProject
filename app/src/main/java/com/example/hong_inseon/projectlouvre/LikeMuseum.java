@@ -103,7 +103,7 @@ public class LikeMuseum extends AppCompatActivity implements NavigationView.OnNa
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE14/getJsonMuseumList.jsp";
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE16/getJsonMuseumList.jsp";
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {

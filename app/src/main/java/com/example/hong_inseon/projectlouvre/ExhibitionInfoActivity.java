@@ -36,10 +36,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 
-public class ExhibitionInfoActivity extends AppCompatActivity implements OnClickListener, NavigationView.OnNavigationItemSelectedListener{
+public class ExhibitionInfoActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     final Context context = this;
-    public Button btnOptAlert;
+    //public Button btnOptAlert;
 
     public static Intent aa;
     public static Intent bb;
@@ -108,12 +108,12 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements OnClick
         });
 
         //옵션 상자
-        btnOptAlert = (Button) findViewById(R.id.buttonBuyOpt);
+        // = (Button) findViewById(R.id.buttonBuyOpt);
         //클릭이벤트
-        btnOptAlert.setOnClickListener(this);
+        //btnOptAlert.setOnClickListener(this);
     }
 
-    public void onClick(View v) {
+    /*public void onClick(View v) {
 
         final CharSequence [] items = {"가이드", "도록", "가이드+도록"};
         final int [] selectedIndex = {0};
@@ -192,7 +192,7 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements OnClick
         alertDialog.show();
 
         */
-    }
+   // }
 
     private String SendByHttp(String msg) {
 
@@ -200,7 +200,7 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements OnClick
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE14/insertJsonBuy.jsp?un="+ un + "&mn=" + mn + "&en="+ en + "&bt=" + buy;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE16/insertJsonBuy.jsp?un="+ un + "&mn=" + mn + "&en="+ en + "&bt=" + buy;
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {

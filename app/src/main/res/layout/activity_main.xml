@@ -52,7 +52,7 @@
         android:id="@+id/drawable"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/logo"
+        app:srcCompat="@drawable/maintest"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

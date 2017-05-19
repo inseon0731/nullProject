@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE14/getJsonLogin.jsp?ue=" + etEmail.getText().toString() + "&up=" + etPassword.getText().toString();
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE16/getJsonLogin.jsp?ue=" + etEmail.getText().toString() + "&up=" + etPassword.getText().toString();
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
@@ -130,7 +130,8 @@ public class LoginActivity extends AppCompatActivity {
                         return;
                     }}
                     catch(Exception e) {
-                        Toast.makeText(LoginActivity.this, "로그인 오류", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "로그인 하였습니다.", Toast.LENGTH_SHORT).show();
+                        LoginActivity.this.finish();
                         return;
                     }
                     Toast.makeText(LoginActivity.this, "로그인하였습니다.", Toast.LENGTH_SHORT).show();

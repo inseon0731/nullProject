@@ -40,6 +40,7 @@ public class LikeExhibition extends AppCompatActivity implements NavigationView.
     ArrayList<Exhibition> arraylist = new ArrayList<Exhibition>();
     private int men;
     Exhibition exData;
+    private int version = 17, un = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +112,7 @@ public class LikeExhibition extends AppCompatActivity implements NavigationView.
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE14/getJsonExhibitionList.jsp";
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE" + version +"/getJsonLikeExhibitionList.jsp/un=" + un;
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {

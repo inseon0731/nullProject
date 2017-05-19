@@ -20,6 +20,9 @@ public class ListViewAdapterMuseum extends BaseAdapter {
     private List<Museum> museumData = null;
     private ArrayList<Museum> museumArrayList;
 
+    int[] a = {R.drawable.louvre, R.drawable.ms3,R.drawable.ms4, R.drawable.ms5,R.drawable.ms6, R.drawable.ms7, R.drawable.ms8,R.drawable.ms9, R.drawable.ms10,R.drawable.ms11,
+            R.drawable.ms12, R.drawable.alfons,R.drawable.munch, R.drawable.louvre,R.drawable.orsay, R.drawable.bazille, R.drawable.alfons,R.drawable.munch, R.drawable.louvre,R.drawable.orsay,};
+
     /**
      * @param context
      * @param museumArrayList : arraylist getMuseumList()
@@ -73,9 +76,9 @@ public class ListViewAdapterMuseum extends BaseAdapter {
         holder.nameM.setText(museumData.get(position).getMs_name());
         holder.nameA.setText(museumData.get(position).getMs_address());
         //ratingbar : int <- parseInt.getMs_rating() : string
-        holder.rating.setRating(Integer.parseInt(museumData.get(position).getMs_rating()));
+        holder.rating.setRating(Float.parseFloat(museumData.get(position).getMs_rating()));
         // 이미지 주소값으로 이미지 불러와서 holder에 추가하기
-        // holder.Image.setImageResource(museumData.get(position).getMs_img());
+        holder.Image.setImageResource(a[position]/*museumData.get(position).getMs_Img()*/);
 
         return view;
     }

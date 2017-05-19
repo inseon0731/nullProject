@@ -53,7 +53,7 @@ public class popup3 extends AppCompatActivity {
         Thread();
         mp.setLooping(true);
 
-        button = (ImageView) findViewById(R.id.play3);
+        button = (ImageView) findViewById(R.id.playpause3);
 
         seekbar.setMax(mp.getDuration());
 
@@ -74,17 +74,33 @@ public class popup3 extends AppCompatActivity {
                 // TODO Auto-generated method stub
                 if (fromUser)
                     mp.seekTo(progress);
+                time= mp.getCurrentPosition()/1000;
+                m = time/60;
+                time = time%60;
+                if(time>= 10)
+                    str = String.format("%d : %d", m, time);
+                else
+                    str = m + " : 0" + time;
+                playstart.setText(str);
+                timel= mp.getDuration()/1000 - mp.getCurrentPosition()/1000;
+                m = timel/60;
+                timel = timel%60;
+                if(timel >= 10)
+                    str = String.format("%d : %d", m, timel);
+                else
+                    str = m + " : 0" + timel;
+                playlast.setText(str);
             }
         });
 
-        String result = SendByHttp("/getJsonMuseumList.jsp"); // 메시지를 서버에 보냄
+        /*String result = SendByHttp("/getJsonMuseumList.jsp"); // 메시지를 서버에 보냄
 
         Log.i("서버에서 받은 전체 내용 : ", result);
         //String[][] parsedData = jsonParserList(); // 받은 메시지를 json 파싱결과를 museum객체에 저장
         getPcData = jsonParser(result);
 
         cont = (TextView)findViewById(R.id.doroktext3);
-        cont.setText(getPcData.getPc_name() + "\n" + getPcData.getPc_author() + "\n" + getPcData.getPc_make() + "\n" + getPcData.getPc_size() + "\n" + getPcData.getPc_exp());
+        cont.setText(getPcData.getPc_name() + "\n" + getPcData.getPc_author() + "\n" + getPcData.getPc_make() + "\n" + getPcData.getPc_size() + "\n" + getPcData.getPc_exp());*/
     }
 
     /*public void onClickClosePopup3(View v) {
@@ -146,16 +162,6 @@ public class popup3 extends AppCompatActivity {
                      * music.getCurrentPosition()은 현재 음악 재생 위치를 가져오는 구문 입니다
                      */
                     seekbar.setProgress(mp.getCurrentPosition());
-                    time= mp.getCurrentPosition()/1000;
-                    m = time/60;
-                    time = time%60;
-                    str = m+" : "+ time;
-                    playstart.setText(str);
-                    timel= mp.getDuration()/1000 - mp.getCurrentPosition()/1000;
-                    m = timel/60;
-                    timel = timel%60;
-                    str = String.format("%d : %d", m, timel);
-                    playlast.setText(str);
                 }
             }
         };

@@ -120,7 +120,7 @@ public class Cart extends AppCompatActivity implements NavigationView.OnNavigati
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE14/getJsonBuy.jsp?un="+un;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE16/getJsonBuy.jsp?un="+un;
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {

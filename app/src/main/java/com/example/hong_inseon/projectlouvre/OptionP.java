@@ -55,8 +55,8 @@ public class OptionP extends AppCompatActivity {
         musAddr = new String[] { "경기도 부천시 원미구", "서울특별시 강남구", "인천광역시 남동구 백범로 124번길",
                 "강원도 홍천시", "인천광역시 연수구 옥련동", "부산광역시 어딘가", "미국 Los Angelous 인지 어딘지 모름"
                 , "우주 안드로메다","이세상 어딘가에 있을거라고 믿는곳", "도서관 4층 일반자료실 노트북코너"};
-        musImage = new int[] {R.drawable.no,R.drawable.cart,R.drawable.heart,R.drawable.louvre,R.drawable.profile,
-                R.drawable.mypage,R.drawable.temple,R.drawable.search,R.drawable.cart,R.drawable.profile};
+        musImage = new int[] {R.drawable.www,R.drawable.www,R.drawable.www,R.drawable.www,R.drawable.www,
+                R.drawable.www,R.drawable.www,R.drawable.www,R.drawable.www,R.drawable.www};
 
         exName = new String[] { "China", "India", "United States",
                 "Indonesia", "Brazil", "Pakistan", "Nigeria", "Bangladesh",
@@ -67,8 +67,8 @@ public class OptionP extends AppCompatActivity {
         exDate = new String[] { "2017.02.28~2017.07.21", "2017.02.27~2017.07.21", "2017.02.28~2017.07.21",
                 "2017.02.26~2017.07.21", "2017.02.25~2017.07.21", "2017.02.24~2017.07.21", "2017.02.23~2017.07.21"
                 , "2017.02.22~2017.07.21","2017.02.21~2017.07.21", "2017.02.20~2017.07.21"};
-        exImage = new int[] {R.drawable.no,R.drawable.cart,R.drawable.heart,R.drawable.louvre,R.drawable.profile,
-                R.drawable.mypage,R.drawable.temple,R.drawable.search,R.drawable.cart,R.drawable.profile};
+        exImage = new int[] {R.drawable.www,R.drawable.www,R.drawable.www,R.drawable.www,R.drawable.www,
+                R.drawable.www,R.drawable.www,R.drawable.www,R.drawable.www,R.drawable.www};
 
         for (int i =0; i<10; i ++){
             MuseumS ms = new MuseumS();
