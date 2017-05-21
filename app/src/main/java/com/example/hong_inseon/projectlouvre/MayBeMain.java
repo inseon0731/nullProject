@@ -16,10 +16,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 public class MayBeMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private int[] tabIcons = {R.drawable.heart, R.drawable.clock, R.drawable.calender, R.drawable.loudspeaker};
+    private int[] tabIcons = {R.drawable.heart_fill, R.drawable.clock, R.drawable.calender, R.drawable.loudspeaker};
     public static Intent aa;
     public static Intent bb;
     public static Intent cc;
@@ -47,6 +48,18 @@ public class MayBeMain extends AppCompatActivity implements NavigationView.OnNav
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_viewM);
         navigationView.setNavigationItemSelectedListener(this);
+
+        if (MainActivity.un != -1)
+        {
+            View v = navigationView.getHeaderView(0);
+            TextView lt = (TextView) v.findViewById(R.id.loginText);
+            TextView lb1 = (TextView) v.findViewById(R.id.loginButton);
+            TextView lb2 = (TextView) v.findViewById(R.id.loginButton2);
+
+            lt.setText(MainActivity.uname + "님 환영합니다!");
+            lb1.setText("로그아웃");
+            lb2.setVisibility(View.INVISIBLE);
+        }
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.rcvr_tl_tabs);
         tabLayout.addTab(tabLayout.newTab().setText("인기전시"));

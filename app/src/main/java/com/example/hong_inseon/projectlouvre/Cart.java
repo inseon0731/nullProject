@@ -14,6 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -31,26 +34,25 @@ public class Cart extends AppCompatActivity implements NavigationView.OnNavigati
 
     ListView list;
     ListViewAdapterBuy listh;
-    String[] name1, name2;
-    int[] Image;
-    boolean[] dorok, guide;
     ArrayList<Buy> arraylist = new ArrayList<Buy>();
     Buy buyData;
     private int men;
-    private int un =1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
+        if(MainActivity.un == -1) {
+            Toast.makeText(this, "로그인 해주세요.", Toast.LENGTH_SHORT).show();
+            this.finish();
+        }
+
         if (android.os.Build.VERSION.SDK_INT > 9)
         {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-
-        //un = LoginActivity.un;
 
         men = -1;
 
@@ -66,37 +68,14 @@ public class Cart extends AppCompatActivity implements NavigationView.OnNavigati
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view4);
         navigationView.setNavigationItemSelectedListener(this);
 
-        /*name1 = new String[] { "China", "India", "United States",
-                "Indonesia", "Brazil", "Pakistan", "Nigeria", "Bangladesh",
-                "Russia", "Japan"};
+        View v = navigationView.getHeaderView(0);
+        TextView lt = (TextView ) v.findViewById(R.id.loginText);
+        TextView lb1=(TextView)v.findViewById(R.id.loginButton);
+        TextView lb2=(TextView)v.findViewById(R.id.loginButton2);
 
-        name2 = new String[] { "Beijing", "New Delhi", "Washington D.C.",
-                "Jakarta", "Brazilia", "Islamabad", "Abuja", "Dacca",
-                "Moskva", "Tokyo"};
-        Image = new int[] {R.drawable.no,R.drawable.cart,R.drawable.heart,R.drawable.louvre,R.drawable.profile,
-                R.drawable.mypage,R.drawable.temple,R.drawable.search,R.drawable.cart,R.drawable.profile};
-        guide = new boolean[] {true, true, false, false, true, true, false, false, true, false};
-        dorok = new boolean[] {false, false, true, true, false, true, true, false, false, false};
-
-        list = (ListView)findViewById(R.id.listViewCart);
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Intent intent = new Intent(Cart.this, ExhibitionInfoActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        for (int i = 0; i < name1.length; i++)
-        {
-            Buy b = new Buy(name1[i],name2[i], Image[i], guide[i], dorok[i]);
-            arraylist.add(b);
-        }
-        //리스트배열을 정리
-
-        listh = new ListViewAdapterBuy(this, arraylist);
-        list.setAdapter(listh);*/
+        lt.setText(MainActivity.uname+"님 환영합니다!");
+        lb1.setText("로그아웃");
+        lb2.setVisibility(View.INVISIBLE);
 
         list = (ListView)findViewById(R.id.listViewCart);
 
@@ -120,7 +99,7 @@ public class Cart extends AppCompatActivity implements NavigationView.OnNavigati
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE16/getJsonBuy.jsp?un="+un;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE" + MainActivity.version + "/getJsonBuy.jsp?un="+ MainActivity.un;
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
@@ -140,6 +119,7 @@ public class Cart extends AppCompatActivity implements NavigationView.OnNavigati
             while ((line = bufreader.readLine()) != null) {
                 result += line;
             }
+            client.getConnectionManager().shutdown();
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -167,8 +147,8 @@ public class Cart extends AppCompatActivity implements NavigationView.OnNavigati
 
                 if(jObject != null) { //museum 데이터 객체에 파싱한 값 저장.
                     buyData = new Buy();
-                    buyData.setNameExhibit(jObject.getString("ms_no"));
-                    buyData.setNameMuseum(jObject.getString("ex_no"));
+                    buyData.setNameExhibit(jObject.getString("ms_name"));
+                    buyData.setNameMuseum(jObject.getString("ex_name"));
                     buyData.setImage(jObject.getString("ex_img"));
                     check = Integer.parseInt(jObject.getString("buy_type"));
                     if(check%2 == 1)

@@ -93,14 +93,14 @@ public class popup3 extends AppCompatActivity {
             }
         });
 
-        /*String result = SendByHttp("/getJsonMuseumList.jsp"); // 메시지를 서버에 보냄
+        String result = SendByHttp("/getJsonPiece.jsp"); // 메시지를 서버에 보냄
 
         Log.i("서버에서 받은 전체 내용 : ", result);
         //String[][] parsedData = jsonParserList(); // 받은 메시지를 json 파싱결과를 museum객체에 저장
         getPcData = jsonParser(result);
 
         cont = (TextView)findViewById(R.id.doroktext3);
-        cont.setText(getPcData.getPc_name() + "\n" + getPcData.getPc_author() + "\n" + getPcData.getPc_make() + "\n" + getPcData.getPc_size() + "\n" + getPcData.getPc_exp());*/
+        cont.setText(getPcData.getPc_name() + "\n" + getPcData.getPc_author() + "\n" + getPcData.getPc_make() + "\n" + getPcData.getPc_size() + "\n" + getPcData.getPc_exp());
     }
 
     /*public void onClickClosePopup3(View v) {
@@ -190,7 +190,7 @@ public class popup3 extends AppCompatActivity {
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE14/getJsonPiece.jsp?mn=1&en=1&pn=3";
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE" + MainActivity.version + "/getJsonPiece.jsp?mn=1&en=1&pn=3";
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
@@ -227,13 +227,7 @@ public class popup3 extends AppCompatActivity {
         Log.i("서버에서 받은 전체 내용 : ", pRecvServerPage);
         try {
             JSONObject jObject = new JSONObject(pRecvServerPage);
-            //JSONArray jarray = jsonObject.getJSONArray("piece");
 
-            // 받아온 pRecvServerPage를 분석하는 부분
-//            for (int i = 0; i < jarray.length(); i++) {
-//                JSONObject jObject = jarray.getJSONObject(i);  // JSONObject 추출
-//
-//                if(jObject != null) { //museum 데이터 객체에 파싱한 값 저장.
             pcData = new Piece();
             pcData.setMs_no(jObject.getString("ms_no"));
             pcData.setEx_no(jObject.getString("ex_no"));
@@ -245,14 +239,9 @@ public class popup3 extends AppCompatActivity {
             pcData.setPc_img(jObject.getString("pc_img"));
             pcData.setPc_audio(jObject.getString("pc_audio"));
             pcData.setPc_size(jObject.getString("pc_size"));
-//                    arraylist.add(msData);
-//                }
-//            }
 
-            // 분해 된 데이터를 확인하기 위한 부분
-            //for(int i=0; i<jarray.length(); i++){
             Log.i("JSON을 파싱한 데이터 출력해보기"+" : ", pcData.toString());
-            //}
+
             return pcData;
         } catch (JSONException e) {
             e.printStackTrace();

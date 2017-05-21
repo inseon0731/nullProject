@@ -60,7 +60,7 @@
                 <ImageButton
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/heart_white"/>
+                    android:background="@drawable/heart_ept"/>
 
             </LinearLayout>
 

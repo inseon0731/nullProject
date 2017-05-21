@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.hong_inseon.projectlouvre.dao.Piece;
 import com.example.hong_inseon.projectlouvre.dao.User;
@@ -32,7 +33,6 @@ import java.io.InputStreamReader;
 public class Profile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private int men;
-    private int un = 1;
     private TextView tv;
     private String pw;
     User userData, getUserData;
@@ -41,6 +41,11 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        if(MainActivity.un == -1) {
+            Toast.makeText(this, "로그인 해주세요.", Toast.LENGTH_SHORT).show();
+            this.finish();
+        }
 
         //un = LoginActivity.un;
 
@@ -62,6 +67,15 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_viewP);
         navigationView.setNavigationItemSelectedListener(this);
 
+        View v = navigationView.getHeaderView(0);
+        TextView lt = (TextView ) v.findViewById(R.id.loginText);
+        TextView lb1=(TextView)v.findViewById(R.id.loginButton);
+        TextView lb2=(TextView)v.findViewById(R.id.loginButton2);
+
+        lt.setText(MainActivity.uname+"님 환영합니다!");
+        lb1.setText("로그아웃");
+        lb2.setVisibility(View.INVISIBLE);
+
         String result = SendByHttp("/getJsonUser.jsp"); // 메시지를 서버에 보냄
 
         Log.i("서버에서 받은 전체 내용 : ", result);
@@ -76,9 +90,9 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
         tv.setText(getUserData.getUser_name());
         tv = (TextView)findViewById(R.id.textView18);
         String str = getUserData.getUser_gender();
-        if(str == "0")
+        if(str.equals("0"))
             tv.setText("남자");
-        else if(str == "1")
+        else if(str.equals("1"))
             tv.setText("여자");
     }
 
@@ -138,6 +152,7 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
                 pw = tv.getText().toString();
                 String result = SendByHttp2("/updateJsonUser.jsp"); // 메시지를 서버에 보냄
                 getUserData = jsonParser(result);
+                Toast.makeText(Profile.this, "수정 되었습니다.", Toast.LENGTH_SHORT).show();
                 break ;
             case R.id.buttonPBack :
                 onBackPressed();
@@ -151,7 +166,7 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE16/getJsonUser.jsp?un="+un;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE"+ MainActivity.version +"/getJsonUser.jsp?un="+MainActivity.un;
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
@@ -185,7 +200,7 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE14/updateJsonUser.jsp?un="+un + "&np=" + pw;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE"+ MainActivity.version +"/updateJsonUser.jsp?un="+ MainActivity.un + "&np=" + pw;
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {

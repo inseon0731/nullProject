@@ -15,6 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.hong_inseon.projectlouvre.dao.Exhibition;
 import com.example.hong_inseon.projectlouvre.dao.Museum;
 
@@ -40,12 +43,16 @@ public class LikeExhibition extends AppCompatActivity implements NavigationView.
     ArrayList<Exhibition> arraylist = new ArrayList<Exhibition>();
     private int men;
     Exhibition exData;
-    private int version = 17, un = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_heart);
+
+        if(MainActivity.un == -1) {
+            Toast.makeText(this, "로그인 해주세요.", Toast.LENGTH_SHORT).show();
+            this.finish();
+        }
 
         if (android.os.Build.VERSION.SDK_INT > 9)
         {
@@ -66,6 +73,15 @@ public class LikeExhibition extends AppCompatActivity implements NavigationView.
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view2);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View v = navigationView.getHeaderView(0);
+        TextView lt = (TextView ) v.findViewById(R.id.loginText);
+        TextView lb1=(TextView)v.findViewById(R.id.loginButton);
+        TextView lb2=(TextView)v.findViewById(R.id.loginButton2);
+
+        lt.setText(MainActivity.uname+"님 환영합니다!");
+        lb1.setText("로그아웃");
+        lb2.setVisibility(View.INVISIBLE);
 
         /*name1 = new String[] { "China", "India", "United States",
                 "Indonesia", "Brazil", "Pakistan", "Nigeria", "Bangladesh",
@@ -98,8 +114,7 @@ public class LikeExhibition extends AppCompatActivity implements NavigationView.
         }*/
         //리스트배열을 정리
 
-        String result = SendByHttp("/getJsonExhibitionList.jsp");
-
+        String result = SendByHttp("/getJsonLikeExhibitionList.jsp");
         arraylist = jsonParserList(result);
         Log.i("@@@", ""+arraylist);
         listh = new ListViewAdapterExhibition(this, arraylist);
@@ -112,7 +127,7 @@ public class LikeExhibition extends AppCompatActivity implements NavigationView.
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE" + version +"/getJsonLikeExhibitionList.jsp/un=" + un;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE" + MainActivity.version + msg + "?un=" + MainActivity.un;
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {

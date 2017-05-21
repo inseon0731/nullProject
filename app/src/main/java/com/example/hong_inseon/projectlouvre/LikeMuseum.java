@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.hong_inseon.projectlouvre.dao.Museum;
 import com.example.hong_inseon.projectlouvre.dao.MuseumDAO;
@@ -34,23 +36,29 @@ import java.util.ArrayList;
 
 public class LikeMuseum extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    String[] name1, name2, Image, rating;
-    MuseumDAO msDao;
+    //String[] name1, name2, Image, rating;
+    //MuseumDAO msDao;
     ListView list;
     ListViewAdapterMuseum listh;
     ArrayList<Museum> arraylist = new ArrayList<Museum>();
     Museum msData;
     private int men;
-    String str =
+    /*String str =
             "[{'no':'1','address':'adresscontent','phone':'010','url':'http://www.com','holiday':'일요일','operating':'월요일','name':'슈퍼맨','rating':'5','like':'20','img':'/img/','exp':'2017-09-09'},"+
                     "{'no':'2','address':'adresscontent','phone':'010','url':'http://www.com','holiday':'일요일','operating':'월요일','name':'배트맨','rating':'1','like':'2','img':'/img/','exp':'2017-09-01'},"+
                     "{'no':'3','address':'adresscontent','phone':'010','url':'http://www.com','holiday':'일요일','operating':'월요일','name':'앤트맨','rating':'2','like':'0','img':'/img/','exp':'2017-01-09'}]";
-    //''없이 그냥 입력해서 숫자 입력가능 - getInt로 받기
+    //''없이 그냥 입력해서 숫자 입력가능 - getInt로 받기*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temple);
+
+        if(MainActivity.un == -1) {
+            Toast.makeText(this, "로그인 해주세요.", Toast.LENGTH_SHORT).show();
+            this.finish();
+        }
+
         if (android.os.Build.VERSION.SDK_INT > 9)
         {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -70,6 +78,15 @@ public class LikeMuseum extends AppCompatActivity implements NavigationView.OnNa
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view3);
         navigationView.setNavigationItemSelectedListener(this);
 
+        View v = navigationView.getHeaderView(0);
+        TextView lt = (TextView ) v.findViewById(R.id.loginText);
+        TextView lb1=(TextView)v.findViewById(R.id.loginButton);
+        TextView lb2=(TextView)v.findViewById(R.id.loginButton2);
+
+        lt.setText(MainActivity.uname+"님 환영합니다!");
+        lb1.setText("로그아웃");
+        lb2.setVisibility(View.INVISIBLE);
+
         //ListView logic
         list = (ListView)findViewById(R.id.listViewTemple);
 
@@ -82,7 +99,7 @@ public class LikeMuseum extends AppCompatActivity implements NavigationView.OnNa
         });
 
         //String sMessage = etMessage.getText().toString(); // 보내는 메시지를 받아옴
-        String result = SendByHttp("/getJsonMuseumList.jsp"); // 메시지를 서버에 보냄
+        String result = SendByHttp("/getJsonLikeMuseumList.jsp"); // 메시지를 서버에 보냄
 
         Log.i("서버에서 받은 전체 내용 : ", result);
         //String[][] parsedData = jsonParserList(); // 받은 메시지를 json 파싱결과를 museum객체에 저장
@@ -103,7 +120,7 @@ public class LikeMuseum extends AppCompatActivity implements NavigationView.OnNa
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE16/getJsonMuseumList.jsp";
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE" + MainActivity.version +"/getJsonLikeMuseumList.jsp?un=" + MainActivity.un;
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {

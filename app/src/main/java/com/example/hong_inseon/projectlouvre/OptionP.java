@@ -2,6 +2,7 @@ package com.example.hong_inseon.projectlouvre;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -16,6 +17,21 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.hong_inseon.projectlouvre.dao.Exhibition;
+import com.example.hong_inseon.projectlouvre.dao.Museum;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -25,69 +41,43 @@ import static android.view.View.VISIBLE;
 public class OptionP extends AppCompatActivity {
     EditText editsearch;
     TextView t,t1,t2;
-    int[] musImage, exImage;
-    String[] musName, exName, musAddr, exContext, exDate, musRating;
     ListView list, list2;
-    ListViewAdapterMuseumS adapter;
-    ListViewAdapterExhibitionS adapter2;
-    ArrayList<MuseumS> arraylist = new ArrayList<MuseumS>();
-    ArrayList<ExhibitionS> arraylist2 = new ArrayList<ExhibitionS>();
+    ListViewAdapterMuseum adapter;
+    ListViewAdapterExhibition adapter2;
+    ArrayList<Museum> arraylist = new ArrayList<Museum>();
+    ArrayList<Exhibition> arraylist2 = new ArrayList<Exhibition>();
 
+    private Museum msData;
+    private Exhibition exData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_option_p);
 
+        if (android.os.Build.VERSION.SDK_INT > 9)
+        {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.abs);
-        //액션바에서 가운데 맞춤을 해주는 것
-        //getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.yourimage));
-        //위에는 이미지를 넣고 싶을때 사용
 
         list = (ListView) findViewById(R.id.listview);
         list2 = (ListView)findViewById(R.id.listview2);
 
-        musName = new String[] { "China", "India", "United States",
-                "Indonesia", "Brazil", "Pakistan", "Nigeria", "Bangladesh",
-                "Russia", "Japan"};
-        musRating = new String[] { "4", "3", "5", "2", "4", "3", "4", "5", "1", "5"};
-        musAddr = new String[] { "경기도 부천시 원미구", "서울특별시 강남구", "인천광역시 남동구 백범로 124번길",
-                "강원도 홍천시", "인천광역시 연수구 옥련동", "부산광역시 어딘가", "미국 Los Angelous 인지 어딘지 모름"
-                , "우주 안드로메다","이세상 어딘가에 있을거라고 믿는곳", "도서관 4층 일반자료실 노트북코너"};
-        musImage = new int[] {R.drawable.www,R.drawable.www,R.drawable.www,R.drawable.www,R.drawable.www,
-                R.drawable.www,R.drawable.www,R.drawable.www,R.drawable.www,R.drawable.www};
+        String result = SendByHttp("/getJsonMuseumList.jsp");
+        Log.i("###1",result);
+        arraylist = jsonParserList(result);
+        Log.i("@@@1", ""+arraylist);
+        String result2 = SendByHttp2("/getJsonExhibitionList.jsp");
+        Log.i("###2",result2);
+        arraylist2 = jsonParserList2(result2);
+        Log.i("@@@2", ""+arraylist2);
 
-        exName = new String[] { "China", "India", "United States",
-                "Indonesia", "Brazil", "Pakistan", "Nigeria", "Bangladesh",
-                "Russia", "Japan"};
-        exContext = new String[] { "Beijing", "New Delhi", "Washington D.C.",
-                "Jakarta", "Brazilia", "Islamabad", "Abuja", "Dacca",
-                "Moskva", "Tokyo"};
-        exDate = new String[] { "2017.02.28~2017.07.21", "2017.02.27~2017.07.21", "2017.02.28~2017.07.21",
-                "2017.02.26~2017.07.21", "2017.02.25~2017.07.21", "2017.02.24~2017.07.21", "2017.02.23~2017.07.21"
-                , "2017.02.22~2017.07.21","2017.02.21~2017.07.21", "2017.02.20~2017.07.21"};
-        exImage = new int[] {R.drawable.www,R.drawable.www,R.drawable.www,R.drawable.www,R.drawable.www,
-                R.drawable.www,R.drawable.www,R.drawable.www,R.drawable.www,R.drawable.www};
-
-        for (int i =0; i<10; i ++){
-            MuseumS ms = new MuseumS();
-            ms.setImage(musImage[i]);
-            ms.setName(musName[i]);
-            ms.setRate(Float.parseFloat(musRating[i]));
-            ms.setAddr(musAddr[i]);
-            arraylist.add(ms);
-
-            ExhibitionS ex = new ExhibitionS();
-            ex.setImage(exImage[i]);
-            ex.setName(exName[i]);
-            ex.setCont(exContext[i]);
-            ex.setDate(exDate[i]);
-            arraylist2.add(ex);
-        }
-
-        adapter = new ListViewAdapterMuseumS(this, arraylist);
-        adapter2 = new ListViewAdapterExhibitionS(this, arraylist2);
+        adapter = new ListViewAdapterMuseum(this, arraylist);
+        adapter2 = new ListViewAdapterExhibition(this, arraylist2);
 
         list.setAdapter(adapter);
         list2.setAdapter(adapter2);
@@ -187,6 +177,158 @@ public class OptionP extends AppCompatActivity {
             ViewGroup.LayoutParams params = listView.getLayoutParams();
             params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
             listView.setLayoutParams(params);
+        }
+    }
+
+    private String SendByHttp(String msg) {
+
+        if(msg == null)
+            msg = "";
+
+        //String URL = ServerUtil.SERVER_URL;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE"+MainActivity.version+"/getJsonMuseumList.jsp";
+        DefaultHttpClient client = new DefaultHttpClient();
+
+        try {
+			/* 체크할 값 서버로 전송 : 쿼리문이 아니라 넘어갈 uri주소 */
+            HttpPost post = new HttpPost(URL);
+			/* 지연시간 최대 3초 */
+            HttpParams params = client.getParams();
+            HttpConnectionParams.setConnectionTimeout(params, 5000);
+            HttpConnectionParams.setSoTimeout(params, 5000);
+
+			/* 데이터 보낸 뒤 서버에서 데이터를 받아오는 과정 */
+            HttpResponse response = client.execute(post);
+            BufferedReader bufreader = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent(), "euc-kr"));
+            String line = null;
+            String result = "";
+            while ((line = bufreader.readLine()) != null) {
+                result += line;
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            client.getConnectionManager().shutdown();	// 연결 지연 종료
+            return "";
+        }
+    }
+
+    /**
+     * 받은 JSON 객체를 파싱하는 메소드
+     * @param pRecvServerPage
+     * @return
+     */
+    public ArrayList jsonParserList(String pRecvServerPage) {
+        Log.i("서버에서 받은 전체 내용 : ", pRecvServerPage);
+        try {
+            JSONObject jsonObject = new JSONObject(pRecvServerPage);
+            JSONArray jarray = jsonObject.getJSONArray("museums");
+
+            // 받아온 pRecvServerPage를 분석하는 부분
+            for (int i = 0; i < jarray.length(); i++) {
+                JSONObject jObject = jarray.getJSONObject(i);  // JSONObject 추출
+
+                if(jObject != null) { //museum 데이터 객체에 파싱한 값 저장.
+                    msData = new Museum();
+                    msData.setMs_no(jObject.getString("ms_no"));
+                    msData.setMs_name(jObject.getString("ms_name"));
+                    msData.setMs_rating(jObject.getString("ms_rating"));
+                    msData.setMs_exp(jObject.getString("ms_exp"));
+                    msData.setMs_url(jObject.getString("ms_url"));
+                    msData.setMs_like(jObject.getString("ms_like"));
+                    msData.setMs_address(jObject.getString("ms_address"));
+                    msData.setMs_holiday(jObject.getString("ms_holiday"));
+                    msData.setMs_Img(jObject.getString("ms_img"));
+                    msData.setMs_operating(jObject.getString("ms_operating"));
+                    msData.setMs_phone(jObject.getString("ms_tel"));
+                    arraylist.add(msData);
+                }
+            }
+
+            // 분해 된 데이터를 확인하기 위한 부분
+            for(int i=0; i<jarray.length(); i++){
+                Log.i("JSON을 파싱한 데이터 출력해보기"+i+" : ", msData.toString());
+            }
+            return arraylist;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private String SendByHttp2(String msg) {
+
+        if(msg == null)
+            msg = "";
+
+        //String URL = ServerUtil.SERVER_URL;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE" + MainActivity.version + msg;
+        DefaultHttpClient client = new DefaultHttpClient();
+
+        try {
+			/* 체크할 값 서버로 전송 : 쿼리문이 아니라 넘어갈 uri주소 */
+            HttpPost post = new HttpPost(URL);
+			/* 지연시간 최대 3초 */
+            HttpParams params = client.getParams();
+            HttpConnectionParams.setConnectionTimeout(params, 5000);
+            HttpConnectionParams.setSoTimeout(params, 5000);
+
+			/* 데이터 보낸 뒤 서버에서 데이터를 받아오는 과정 */
+            HttpResponse response = client.execute(post);
+            BufferedReader bufreader = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent(), "euc-kr"));
+            String line = null;
+            String result = "";
+            while ((line = bufreader.readLine()) != null) {
+                result += line;
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            client.getConnectionManager().shutdown();	// 연결 지연 종료
+            return "";
+        }
+    }
+
+    public ArrayList jsonParserList2(String pRecvServerPage) {
+        Log.i("서버에서 받은 전체 내용 : ", pRecvServerPage);
+        try {
+            JSONObject jsonObject = new JSONObject(pRecvServerPage);
+            JSONArray jarray = jsonObject.getJSONArray("exhibitions");
+
+            Log.i("@@@", ""+jarray);
+
+            // 받아온 pRecvServerPage를 분석하는 부분
+            for (int i = 0; i < jarray.length(); i++) {
+                JSONObject jObject = jarray.getJSONObject(i);  // JSONObject 추출
+
+                if(jObject != null) { //museum 데이터 객체에 파싱한 값 저장.
+                    exData = new Exhibition();
+                    exData.setEx_no(jObject.getString("ex_no"));
+                    exData.setEx_name(jObject.getString("ex_name"));
+                    exData.setEx_theme(jObject.getString("ex_theme"));
+                    exData.setEx_like(jObject.getString("ex_like"));
+                    exData.setEx_img(jObject.getString("ex_img"));
+                    exData.setMs_no(jObject.getString("ms_no"));
+                    exData.setEx_location(jObject.getString("ex_location"));
+                    exData.setEx_rating(jObject.getString("ex_rating"));
+                    exData.setEx_pay(jObject.getString("ex_pay"));
+                    exData.setEx_exp(jObject.getString("ex_exp"));
+                    exData.setEx_period(jObject.getString("ex_period"));
+                    exData.setEx_ing(jObject.getString("ex_ing"));
+                    arraylist2.add(exData);
+                }
+            }
+
+            // 분해 된 데이터를 확인하기 위한 부분
+            for(int i=0; i<jarray.length(); i++){
+                Log.i("JSON을 파싱한 데이터 출력해보기"+i+" : ", exData.toString());
+            }
+            return arraylist2;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by 박명준 on 2017-03-06.
@@ -89,24 +88,5 @@ public class ListViewAdapterBuy extends BaseAdapter {
         });*/
 
         return view;
-    }
-
-    public void filter(String charText) {
-        charText = charText.toLowerCase(Locale.getDefault());
-        buylist.clear();
-        if (charText.length() == 0) {
-            buylist.addAll(arraylist2);
-        }
-        else
-        {
-            for (Buy wp : arraylist2)
-            {
-                if (wp.getNameExhibit().toLowerCase(Locale.getDefault()).contains(charText))
-                {
-                    buylist.add(wp);
-                }
-            }
-        }
-        notifyDataSetChanged();
     }
 }

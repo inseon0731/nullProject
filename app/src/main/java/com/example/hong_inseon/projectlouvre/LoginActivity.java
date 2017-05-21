@@ -30,7 +30,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPassword;
     private Button btnJoin;
     private Button btnLogin;
-    public static int un = 0;
 
     User userData, getUserData;
 
@@ -59,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE16/getJsonLogin.jsp?ue=" + etEmail.getText().toString() + "&up=" + etPassword.getText().toString();
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE"+ MainActivity.version+"/getJsonLogin.jsp?ue=" + etEmail.getText().toString() + "&up=" + etPassword.getText().toString();
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
@@ -115,27 +114,33 @@ public class LoginActivity extends AppCompatActivity {
 
             switch (view.getId()) {
                 case R.id.btnLogin:
-                    if(etEmail.getText().toString().length() == 0)
-                        if(etPassword.getText().toString().length() == 0) {
-                            Toast.makeText(LoginActivity.this, "이메일과 비밀번호를 정확히 입력해 주세요", Toast.LENGTH_SHORT).show();
+                    if (etEmail.getText().toString().length() == 0 || etPassword.getText().toString().length() == 0)
+                    {
+                        Toast.makeText(LoginActivity.this, "이메일과 비밀번호를 정확히 입력해 주세요", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    try {
+                        String result = SendByHttp("/getJsonLogin.jsp"); // 메시지를 서버에 보냄
+                        Log.i("서버에서 받은 전체 내용 : ", result);
+                        getUserData = jsonParser(result);
+                        if(getUserData.getUser_no().equals("-1"))
+                        {
+                            Toast.makeText(LoginActivity.this, "이메일과 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                    String result = SendByHttp("/getJsonLogin.jsp"); // 메시지를 서버에 보냄
-                    Log.i("서버에서 받은 전체 내용 : ", result);
-                    getUserData = jsonParser(result);
-                    try {
-                    if(getUserData.getUser_no() == "")
-                    {
-                        Toast.makeText(LoginActivity.this, "이메일과 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }}
+                        if(getUserData.getUser_no().equals(""))
+                        {
+                            Toast.makeText(LoginActivity.this, "이메일이 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
                     catch(Exception e) {
-                        Toast.makeText(LoginActivity.this, "로그인 하였습니다.", Toast.LENGTH_SHORT).show();
-                        LoginActivity.this.finish();
+                        Toast.makeText(LoginActivity.this, "로그인 오류", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     Toast.makeText(LoginActivity.this, "로그인하였습니다.", Toast.LENGTH_SHORT).show();
-                    un = Integer.parseInt(getUserData.getUser_no());
+                    MainActivity.un = Integer.parseInt(getUserData.getUser_no());
+                    MainActivity.uname = getUserData.getUser_name();
                     LoginActivity.this.finish();
                     break;
 

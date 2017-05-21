@@ -12,7 +12,7 @@
             android:title="내 정보" />
         <item
             android:id="@+id/heartid"
-            android:icon="@drawable/heart"
+            android:icon="@drawable/heart_fill"
             android:title="좋아하는 전시" />
         <item
             android:id="@+id/templeid"

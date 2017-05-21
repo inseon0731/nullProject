@@ -17,6 +17,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,13 +25,19 @@ import android.view.View.OnClickListener;
 //import android.webkit.WebView;
 //import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.hong_inseon.projectlouvre.dao.User;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -46,17 +53,17 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements Navigat
     public static Intent cc;
     public static Intent dd;
     public static int men = -1;
-    private int un = 1, mn = 1, en = 1, buy = 0;
-
-    private int[] tabIcons = {R.drawable.heart, R.drawable.clock, R.drawable.calender, R.drawable.loudspeaker};
+    private int mn = 1, en = 1, buy = 0;
+    private boolean ch = false;
+    private ImageView iv;
+    //private int[] tabIcons = {R.drawable.heart, R.drawable.clock, R.drawable.calender, R.drawable.loudspeaker};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //?? 에러있는 듯?
         setContentView(R.layout.activity_exhibition_info_drawer);
 
-        //un = LoginActivity.un;
+        iv=(ImageView)findViewById(R.id.exHeart);
 
         aa = new Intent(this, Cart.class);
         bb = new Intent(this, Profile.class);
@@ -75,15 +82,19 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements Navigat
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        if (MainActivity.un != -1)
+        {
+            View v = navigationView.getHeaderView(0);
+            TextView lt = (TextView) v.findViewById(R.id.loginText);
+            TextView lb1 = (TextView) v.findViewById(R.id.loginButton);
+            TextView lb2 = (TextView) v.findViewById(R.id.loginButton2);
+
+            lt.setText(MainActivity.uname + "님 환영합니다!");
+            lb1.setText("로그아웃");
+            lb2.setVisibility(View.INVISIBLE);
+        }
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.menuTabLayout);
-
-        /*WebView webView = (WebView)findViewById(R.id.webView);
-        webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl("http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE/getExhiTab.jsp");*/
-
-        //if(VERSION.SDK_INT >= 19) {
-        //    webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        //}
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.menupager);
         final ExhibitionInfoActivity.PagerAdapter adapter = new ExhibitionInfoActivity.PagerAdapter
@@ -107,92 +118,86 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements Navigat
             }
         });
 
-        //옵션 상자
-        // = (Button) findViewById(R.id.buttonBuyOpt);
-        //클릭이벤트
-        //btnOptAlert.setOnClickListener(this);
+        String result = SendByHttp2("/insertJsonBuy.jsp");
+        ch = jsonParser(result);
+        if(ch)
+        {
+            iv.setImageResource(R.drawable.heart_fill);
+        }
     }
 
-    /*public void onClick(View v) {
+    public void onClick(View v) {
+        switch(v.getId())
+        {
+            case R.id.buttonBuyOpt:
+                final CharSequence[] items = {"가이드", "도록", "가이드+도록"};
+                final int[] selectedIndex = {0};
 
-        final CharSequence [] items = {"가이드", "도록", "가이드+도록"};
-        final int [] selectedIndex = {0};
+                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-
-        dialog.setPositiveButton("구매", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //프로그램을 종료한다
-                which++;
-                buy = which;
-                String result = SendByHttp("/insertJsonBuy.jsp");
-
-                Toast.makeText(getApplicationContext(), items[selectedIndex[0]] + " 구매했습니다.", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
-
-        dialog.setNegativeButton("취소", new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        dialog.setSingleChoiceItems(items,
-                0,
-                new DialogInterface.OnClickListener() {
+                dialog.setPositiveButton("구매", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which){
-                        selectedIndex[0] = which;
+                    public void onClick(DialogInterface dialog, int which) {
+                        //프로그램을 종료한다
+                        which++;
+                        buy = which;
+                        String result = SendByHttp("/insertJsonBuy.jsp");
 
+                        Toast.makeText(getApplicationContext(), items[selectedIndex[0]] + " 구매했습니다.", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
                     }
                 });
 
-        dialog.show();
+                dialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
 
-        /*
-        dialog.setItems(items, new DialogInterface.OnClickListener(){
-            //리스트 선택시 이벤트
+                dialog.setSingleChoiceItems(items,
+                        0,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                selectedIndex[0] = which;
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getApplicationContext(), items[which]+" 선택했습니다", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-
-
-
-        final CharSequence[] items = {"가이드", "도록", "가이드+도록"};
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            }
+                        });
+                dialog.show();
 
 
-        //alertDialogBuilder.setTitle("옵션 선택 목록 대화상자"); //제목 셋팅
+               /* dialog.setItems(items, new DialogInterface.OnClickListener() {
+                    //리스트 선택시 이벤트
 
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getApplicationContext(), items[which] + " 선택했습니다", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();*/
+                break;
+            case R.id.exHeart:
+                String result2 = SendByHttp3("/getJsonLikeCHE.jsp"); // 메시지를 서버에 보냄
+                ch = jsonParser2(result2);
+                if(ch)
+                {
+                    iv.setImageResource(R.drawable.heart_fill);
+                    Toast.makeText(ExhibitionInfoActivity.this, "좋아요 하셨습니다.", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    iv.setImageResource(R.drawable.heart_ept);
+                    Toast.makeText(ExhibitionInfoActivity.this, "좋아요를 취소하셨습니다.", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.exMap:
+                startActivity(new Intent(this, MapActivity.class));
+                break;
+        }
 
-
-        //다이얼로그 생성
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        //alertDialog.getWindow().setGravity(Gravity.BOTTOM);
-
-        LayoutParams params = alertDialogBuilder.getContext().
-                //getWindow().getAttributes();
-        params.x=100;
-        params.y=200;
-        alertDialog.getWindow().setAttributes(params);
-
-
-        //다이얼로그 보여주기
-        alertDialog.show();
-
-        */
-   // }
+    }
 
     private String SendByHttp(String msg) {
 
@@ -200,7 +205,7 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements Navigat
             msg = "";
 
         //String URL = ServerUtil.SERVER_URL;
-        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE16/insertJsonBuy.jsp?un="+ un + "&mn=" + mn + "&en="+ en + "&bt=" + buy;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE"+ MainActivity.version +"/insertJsonBuy.jsp?un="+ MainActivity.un + "&mn=" + mn + "&en="+ en + "&bt=" + buy;
         DefaultHttpClient client = new DefaultHttpClient();
 
         try {
@@ -228,6 +233,108 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements Navigat
         }
     }
 
+    private String SendByHttp2(String msg) {
+
+        if(msg == null)
+            msg = "";
+
+        //String URL = ServerUtil.SERVER_URL;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE"+ MainActivity.version +"/getJsonLikeE.jsp?un="+ MainActivity.un + "&mn=" + mn + "&en="+ en;
+        DefaultHttpClient client = new DefaultHttpClient();
+
+        try {
+			/* 체크할 값 서버로 전송 : 쿼리문이 아니라 넘어갈 uri주소 */
+            HttpPost post = new HttpPost(URL);
+			/* 지연시간 최대 3초 */
+            HttpParams params = client.getParams();
+            HttpConnectionParams.setConnectionTimeout(params, 5000);
+            HttpConnectionParams.setSoTimeout(params, 5000);
+
+			/* 데이터 보낸 뒤 서버에서 데이터를 받아오는 과정 */
+            HttpResponse response = client.execute(post);
+            BufferedReader bufreader = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent(), "euc-kr"));
+            String line = null;
+            String result = "";
+            while ((line = bufreader.readLine()) != null) {
+                result += line;
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            client.getConnectionManager().shutdown();	// 연결 지연 종료
+            return "";
+        }
+    }
+
+    public boolean jsonParser(String pRecvServerPage) {
+        Log.i("서버에서 받은 전체 내용 : ", pRecvServerPage);
+        boolean check= false;
+        try {
+            JSONObject jObject = new JSONObject(pRecvServerPage);
+
+            check = Boolean.parseBoolean(jObject.getString("like"));
+
+            Log.i("JSON을 파싱한 데이터 출력해보기"+" : ", "" + check);
+            //}
+            return check;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private String SendByHttp3(String msg) {
+
+        if(msg == null)
+            msg = "";
+
+        //String URL = ServerUtil.SERVER_URL;
+        String URL = "http://ec2-35-161-181-60.us-west-2.compute.amazonaws.com:8080/ProjectLOUVRE"+ MainActivity.version +"/getJsonLikeCHE.jsp?un="+ MainActivity.un + "&mn=" + mn + "&en="+ en;
+        DefaultHttpClient client = new DefaultHttpClient();
+
+        try {
+			/* 체크할 값 서버로 전송 : 쿼리문이 아니라 넘어갈 uri주소 */
+            HttpPost post = new HttpPost(URL);
+			/* 지연시간 최대 3초 */
+            HttpParams params = client.getParams();
+            HttpConnectionParams.setConnectionTimeout(params, 5000);
+            HttpConnectionParams.setSoTimeout(params, 5000);
+
+			/* 데이터 보낸 뒤 서버에서 데이터를 받아오는 과정 */
+            HttpResponse response = client.execute(post);
+            BufferedReader bufreader = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent(), "euc-kr"));
+            String line = null;
+            String result = "";
+            while ((line = bufreader.readLine()) != null) {
+                result += line;
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            client.getConnectionManager().shutdown();	// 연결 지연 종료
+            return "";
+        }
+    }
+
+    public boolean jsonParser2(String pRecvServerPage) {
+        Log.i("서버에서 받은 전체 내용 : ", pRecvServerPage);
+        boolean check= false;
+        try {
+            JSONObject jObject = new JSONObject(pRecvServerPage);
+
+            check = Boolean.parseBoolean(jObject.getString("like"));
+
+            Log.i("JSON을 파싱한 데이터 출력해보기"+" : ", "" + check);
+            //}
+            return check;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -247,27 +354,14 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements Navigat
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
         Intent i = new Intent(this, OptionP.class);
         startActivity(i);
-
-        /*int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }*/
-
         return super.onOptionsItemSelected(item);
-    }//클릭했을시
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.cartid) {
@@ -304,10 +398,6 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements Navigat
 
     public void log(View v) {
         startActivity(new Intent(this, LoginActivity.class));
-    }
-
-    public void map(View v) {
-        startActivity(new Intent(this, MapActivity.class));
     }
 
     public void navJoin(View v) {  startActivity(new Intent(this, JoinActivity.class));}

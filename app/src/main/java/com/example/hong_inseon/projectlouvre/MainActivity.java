@@ -9,10 +9,16 @@ import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static int version= 17;
+    public static int un = -1;
+    public static String uname;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        uname = new String();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
