@@ -1,9 +1,5 @@
 package com.example.hong_inseon.projectlouvre;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
@@ -11,13 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-
-import com.example.hong_inseon.projectlouvre.dao.Museum;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -31,13 +21,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
 
-/**
- * Created by 박명준 on 2017-03-10.
- */
 
 public class MyTabFragment4 extends Fragment {
     private ListView mListView = null;
@@ -124,7 +108,7 @@ public class MyTabFragment4 extends Fragment {
 
                 if (jObject != null) { //museum 데이터 객체에 파싱한 값 저장.
                     noteData = new Notice();
-                    noteData.setNote_title(jObject.getString("note_tile"));
+                    noteData.setNote_title(jObject.getString("note_title"));
                     noteData.setMs_name(jObject.getString("ms_name"));
                     noteData.setNote_content(jObject.getString("note_content"));
                     noteData.setNote_date(jObject.getString("note_date"));

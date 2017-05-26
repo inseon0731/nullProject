@@ -9,7 +9,9 @@ import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static int version= 17;
+    public static int version= 18;
+    public static int mn = 0;
+    public static int en = 0;
     public static int un = -1;
     public static String uname;
 

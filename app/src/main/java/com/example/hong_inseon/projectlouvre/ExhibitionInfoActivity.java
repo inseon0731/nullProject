@@ -63,6 +63,9 @@ public class ExhibitionInfoActivity extends AppCompatActivity implements Navigat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exhibition_info_drawer);
 
+        MainActivity.mn=1;
+        MainActivity.en=1;
+
         iv=(ImageView)findViewById(R.id.exHeart);
 
         aa = new Intent(this, Cart.class);
